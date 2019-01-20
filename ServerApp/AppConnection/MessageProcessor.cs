@@ -48,6 +48,9 @@ namespace ServerApp.AppConnection
                     break;
                 case "CHANGE_STATUS":
                     break;
+                case "GET_STATUS":
+                    break;
+
             }
         }
 

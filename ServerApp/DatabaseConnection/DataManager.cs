@@ -69,6 +69,35 @@ namespace ServerApp.DatabaseConnection
             }
         }
 
+        public static List<string> GetOrderDetails(Guid orderId)
+        {
+            using (var context = new RestaurantEntities())
+            {
+                List<string> words = new List<string>();
+                var result = from s in context.Order_Status
+                             join o in context.Orders
+                             on s.Order_Id equals o.Order_Id
+                             join c in context.Couriers
+                             on o.Courier_Id equals c.Courier_Id
+                             where s.Order_Id.Equals(orderId)
+                             select new
+                             {
+                                 s.Order_Status1,
+                                 s.Last_Update,
+                                 c.Name,
+                                 c.Phone
+                             };
+                foreach(var item in result)
+                {
+                    words.Add(item.Order_Status1.ToString());
+                    words.Add(item.Last_Update.ToString());
+                    words.Add(item.Name.ToString());
+                    words.Add(item.Phone.ToString());
+                }
+                return words;
+            }
+        }
+
         #endregion
 
         #region Methods Store
@@ -126,6 +155,7 @@ namespace ServerApp.DatabaseConnection
                              where c.Order_Id.Equals(orderId)
                              select c).First();
                 result.Order_Status1 = status;
+                result.Last_Update = DateTime.Now;
                 context.SaveChanges();
 
             }
