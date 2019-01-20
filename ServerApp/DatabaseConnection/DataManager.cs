@@ -72,7 +72,7 @@ namespace ServerApp.DatabaseConnection
         #endregion
 
         #region Methods Store
-        public static List<string> GetOrders(string status)
+        public static List<string> GetOrders()
         {
             using (var context = new RestaurantEntities())
             {
@@ -80,26 +80,75 @@ namespace ServerApp.DatabaseConnection
                 var results = from o in context.Orders
                             join s in context.Order_Status
                             on o.Order_Id equals s.Order_Id
-                            join p in context.Processings
-                            on o.Order_Id equals p.Order_Id
-                            join c in context.Products
-                            on p.Product_Id equals c.Product_Id
-                            where s.Order_Status1.Equals(status)
+                            join u in context.Users
+                            on o.Id_User equals u.Id_User
+                            where s.Order_Status1.Equals("Waiting")
                             select new
-
                             {
                                 o.Order_Id,
-                                s.Order_Status1,
-                                //////////////////////////////////////////
+                                u.Username,
+                                u.Phone,
+                                u.User_Address
                             };
+
                 foreach(var item in results)
                 {
                     words.Add(item.Order_Id.ToString());
+                    words.Add(item.Username.ToString());
+                    words.Add(item.Phone.ToString());
+                    words.Add(item.User_Address.ToString());
+                    var rezProducts = from r in results
+                                      join p in context.Processings
+                                      on r.Order_Id equals p.Order_Id
+                                      join prod in context.Products
+                                      on p.Product_Id equals prod.Product_Id
+                                      where r.Order_Id.Equals(item.Order_Id)
+                                      select new
+                                      {
+                                         prod.Name,
+                                         prod.Preparation_time
+                                      };
+                    foreach (var prod in rezProducts)
+                    {
+                        words.Add(prod.Name.ToString());
+                        words.Add(prod.Preparation_time.ToString());
+                    }
                 }
                 return words;
             }
         }
 
+        public static void ChangeStatus(Guid orderId, string status)
+        {
+            using (var context = new RestaurantEntities())
+            {
+                var result = (from c in context.Order_Status
+                             where c.Order_Id.Equals(orderId)
+                             select c).First();
+                result.Order_Status1 = status;
+                context.SaveChanges();
+
+            }
+        }
+
+        public static void GenerateBill(Guid orderId)
+        {
+            using (var context = new RestaurantEntities())
+            {
+                var results = from c in context.Processings
+                              join p in context.Products
+                              on c.Product_Id equals p.Product_Id
+                              where c.Order_Id.Equals(orderId)
+                              select new
+                              {
+                                  p.Price
+                              };
+                double total = 0;
+                foreach (var item in results)
+                    total += Convert.ToDouble(item.Price);
+                Insert_Bill(orderId, total, DateTime.Now);
+            }
+        }
         #endregion
 
         #region Insert

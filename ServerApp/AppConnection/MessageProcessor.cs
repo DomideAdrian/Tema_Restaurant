@@ -46,6 +46,8 @@ namespace ServerApp.AppConnection
                     break;
                 case "REQUEST_ORDERS":
                     break;
+                case "CHANGE_STATUS":
+                    break;
             }
         }
 
