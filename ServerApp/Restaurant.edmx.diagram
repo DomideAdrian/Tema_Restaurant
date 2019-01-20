@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7dbcdb6604f94371980b1bfec78e5ce5" Name="Diagram1">
+        <EntityTypeShape EntityType="RestaurantModel.Bill" Width="1.5" PointX="5.25" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Courier" Width="1.5" PointX="0.75" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Loyal_Customers" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Order_Reviews" Width="1.5" PointX="5.25" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Order_Status" Width="1.5" PointX="5.25" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Order" Width="1.5" PointX="3" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Processing" Width="1.5" PointX="8.25" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Product_Category" Width="1.5" PointX="3.625" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Product" Width="1.5" PointX="6" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.sysdiagram" Width="1.5" PointX="0.875" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.User" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Voucher" Width="1.5" PointX="2.875" PointY="15.125" IsExpanded="true" />
+        <AssociationConnector Association="RestaurantModel.FK__Bill__Order_Id__286302EC" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantModel.FK__Orders__Courier___1FCDBCEB" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantModel.FK__Loyal_Cus__Id_Us__173876EA" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantModel.FK__Order_Rev__Order__25869641" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantModel.FK__Order_Sta__Order__22AA2996" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantModel.FK__Orders__Id_User__1ED998B2" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantModel.FK__Processin__Order__2C3393D0" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantModel.FK__Processin__Produ__2B3F6F97" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantModel.FK__Products__Produc__1273C1CD" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantModel.FK__Vouchers__Id_Use__1A14E395" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

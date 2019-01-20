@@ -1,0 +1,991 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RestaurantModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bill">
+          <Key>
+            <PropertyRef Name="Bill_Id" />
+          </Key>
+          <Property Name="Bill_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Order_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Total" Type="float" Nullable="false" />
+          <Property Name="Billing_Date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Couriers">
+          <Key>
+            <PropertyRef Name="Courier_Id" />
+          </Key>
+          <Property Name="Courier_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Loyal_Customers">
+          <Key>
+            <PropertyRef Name="Loiality_Id" />
+          </Key>
+          <Property Name="Loiality_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_User" Type="uniqueidentifier" />
+          <Property Name="Period" Type="datetime" />
+          <Property Name="Orders" Type="int" />
+          <Property Name="Total" Type="float" />
+        </EntityType>
+        <EntityType Name="Order_Reviews">
+          <Key>
+            <PropertyRef Name="Review_Id" />
+          </Key>
+          <Property Name="Review_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Order_Id" Type="uniqueidentifier" />
+          <Property Name="Mark" Type="int" Nullable="false" />
+          <Property Name="Details" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Order_Status">
+          <Key>
+            <PropertyRef Name="Status_Id" />
+          </Key>
+          <Property Name="Status_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Order_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Order_Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Last_Update" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="Order_Id" />
+          </Key>
+          <Property Name="Order_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_User" Type="uniqueidentifier" />
+          <Property Name="Courier_Id" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="Processing">
+          <Key>
+            <PropertyRef Name="Processing_Id" />
+          </Key>
+          <Property Name="Processing_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Product_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Order_Id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product_Category">
+          <Key>
+            <PropertyRef Name="Category_Id" />
+          </Key>
+          <Property Name="Category_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Category_Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="Product_Id" />
+          </Key>
+          <Property Name="Product_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Product_Category" Type="uniqueidentifier" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Preparation_time" Type="int" Nullable="false" />
+          <Property Name="Product_Description" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id_User" />
+          </Key>
+          <Property Name="Id_User" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="User_Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="User_Address" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vouchers">
+          <Key>
+            <PropertyRef Name="Voucher_Id" />
+          </Key>
+          <Property Name="Voucher_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id_User" Type="uniqueidentifier" />
+          <Property Name="Value" Type="float" Nullable="false" />
+          <Property Name="Valability" Type="datetime" />
+        </EntityType>
+        <Association Name="FK__Bill__Order_Id__286302EC">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="Bill" Type="Self.Bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Order_Id" />
+            </Principal>
+            <Dependent Role="Bill">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Loyal_Cus__Id_Us__49C3F6B7">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Loyal_Customers" Type="Self.Loyal_Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id_User" />
+            </Principal>
+            <Dependent Role="Loyal_Customers">
+              <PropertyRef Name="Id_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Order_Rev__Order__25869641">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="Order_Reviews" Type="Self.Order_Reviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Order_Id" />
+            </Principal>
+            <Dependent Role="Order_Reviews">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Order_Sta__Order__22AA2996">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="Order_Status" Type="Self.Order_Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Order_Id" />
+            </Principal>
+            <Dependent Role="Order_Status">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__Courier___1FCDBCEB">
+          <End Role="Couriers" Type="Self.Couriers" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Couriers">
+              <PropertyRef Name="Courier_Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="Courier_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__Id_User__1ED998B2">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id_User" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="Id_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Processin__Order__2C3393D0">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="Processing" Type="Self.Processing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Order_Id" />
+            </Principal>
+            <Dependent Role="Processing">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Processin__Produ__2B3F6F97">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Processing" Type="Self.Processing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="Product_Id" />
+            </Principal>
+            <Dependent Role="Processing">
+              <PropertyRef Name="Product_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Produc__1273C1CD">
+          <End Role="Product_Category" Type="Self.Product_Category" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_Category">
+              <PropertyRef Name="Category_Id" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="Product_Category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Vouchers__Id_Use__1A14E395">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Vouchers" Type="Self.Vouchers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id_User" />
+            </Principal>
+            <Dependent Role="Vouchers">
+              <PropertyRef Name="Id_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="Insert_Bill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BillId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="OrderId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Total" Type="float" Mode="In" />
+          <Parameter Name="Data" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="Insert_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Category_Id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Category_Name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Insert_Courier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CourierId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Phone" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Insert_Loyal_Customer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LoialityId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="IdUser" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Period" Type="datetime" Mode="In" />
+          <Parameter Name="Total" Type="float" Mode="In" />
+        </Function>
+        <Function Name="Insert_Order" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Order_Id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="IdUser" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="CourierId" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="Insert_Order_Status" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Status_Id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Order_Id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Order_Status" Type="nvarchar" Mode="In" />
+          <Parameter Name="Last_Update" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="Insert_Processing" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Processing_Id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Product_Id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Order_Id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="Insert_Product" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Product_Id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="ProductName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Category_Id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Price" Type="float" Mode="In" />
+          <Parameter Name="Time" Type="int" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Insert_Review" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Review_Id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Order_Id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Mark" Type="int" Mode="In" />
+          <Parameter Name="Details" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Insert_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustomerName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="Phone" Type="nvarchar" Mode="In" />
+          <Parameter Name="Address" Type="nvarchar" Mode="In" />
+          <Parameter Name="IdUser" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="Set_Voucher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUser" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Value" Type="float" Mode="In" />
+        </Function>
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="User_Login" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustomerName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="IdUser" Type="uniqueidentifier" Mode="InOut" />
+          <Parameter Name="Telefon" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="Voucher" Type="float" Mode="InOut" />
+        </Function>
+        <EntityContainer Name="RestaurantModelStoreContainer">
+          <EntitySet Name="Bill" EntityType="Self.Bill" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Couriers" EntityType="Self.Couriers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Loyal_Customers" EntityType="Self.Loyal_Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order_Reviews" EntityType="Self.Order_Reviews" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order_Status" EntityType="Self.Order_Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Processing" EntityType="Self.Processing" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product_Category" EntityType="Self.Product_Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vouchers" EntityType="Self.Vouchers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Bill__Order_Id__286302EC" Association="Self.FK__Bill__Order_Id__286302EC">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Bill" EntitySet="Bill" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Loyal_Cus__Id_Us__49C3F6B7" Association="Self.FK__Loyal_Cus__Id_Us__49C3F6B7">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Loyal_Customers" EntitySet="Loyal_Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Order_Rev__Order__25869641" Association="Self.FK__Order_Rev__Order__25869641">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Order_Reviews" EntitySet="Order_Reviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Order_Sta__Order__22AA2996" Association="Self.FK__Order_Sta__Order__22AA2996">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Order_Status" EntitySet="Order_Status" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__Courier___1FCDBCEB" Association="Self.FK__Orders__Courier___1FCDBCEB">
+            <End Role="Couriers" EntitySet="Couriers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__Id_User__1ED998B2" Association="Self.FK__Orders__Id_User__1ED998B2">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Processin__Order__2C3393D0" Association="Self.FK__Processin__Order__2C3393D0">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Processing" EntitySet="Processing" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Processin__Produ__2B3F6F97" Association="Self.FK__Processin__Produ__2B3F6F97">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Processing" EntitySet="Processing" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Produc__1273C1CD" Association="Self.FK__Products__Produc__1273C1CD">
+            <End Role="Product_Category" EntitySet="Product_Category" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Vouchers__Id_Use__1A14E395" Association="Self.FK__Vouchers__Id_Use__1A14E395">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Vouchers" EntitySet="Vouchers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RestaurantModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Bill">
+          <Key>
+            <PropertyRef Name="Bill_Id" />
+          </Key>
+          <Property Name="Bill_Id" Type="Guid" Nullable="false" />
+          <Property Name="Order_Id" Type="Guid" Nullable="false" />
+          <Property Name="Total" Type="Double" Nullable="false" />
+          <Property Name="Billing_Date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Bill__Order_Id__286302EC" FromRole="Bill" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Courier">
+          <Key>
+            <PropertyRef Name="Courier_Id" />
+          </Key>
+          <Property Name="Courier_Id" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Courier___1FCDBCEB" FromRole="Couriers" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Loyal_Customers">
+          <Key>
+            <PropertyRef Name="Loiality_Id" />
+          </Key>
+          <Property Name="Loiality_Id" Type="Guid" Nullable="false" />
+          <Property Name="Id_User" Type="Guid" />
+          <Property Name="Period" Type="DateTime" Precision="3" />
+          <Property Name="Total" Type="Double" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Loyal_Cus__Id_Us__173876EA" FromRole="Loyal_Customers" ToRole="Users" />
+          <Property Name="Orders" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Order_Reviews">
+          <Key>
+            <PropertyRef Name="Review_Id" />
+          </Key>
+          <Property Name="Review_Id" Type="Guid" Nullable="false" />
+          <Property Name="Order_Id" Type="Guid" />
+          <Property Name="Mark" Type="Int32" Nullable="false" />
+          <Property Name="Details" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Order_Rev__Order__25869641" FromRole="Order_Reviews" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Order_Status">
+          <Key>
+            <PropertyRef Name="Status_Id" />
+          </Key>
+          <Property Name="Status_Id" Type="Guid" Nullable="false" />
+          <Property Name="Order_Id" Type="Guid" Nullable="false" />
+          <Property Name="Order_Status1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Last_Update" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Order_Sta__Order__22AA2996" FromRole="Order_Status" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Order_Id" />
+          </Key>
+          <Property Name="Order_Id" Type="Guid" Nullable="false" />
+          <Property Name="Id_User" Type="Guid" />
+          <Property Name="Courier_Id" Type="Guid" />
+          <NavigationProperty Name="Bills" Relationship="Self.FK__Bill__Order_Id__286302EC" FromRole="Orders" ToRole="Bill" />
+          <NavigationProperty Name="Courier" Relationship="Self.FK__Orders__Courier___1FCDBCEB" FromRole="Orders" ToRole="Couriers" />
+          <NavigationProperty Name="Order_Reviews" Relationship="Self.FK__Order_Rev__Order__25869641" FromRole="Orders" ToRole="Order_Reviews" />
+          <NavigationProperty Name="Order_Status" Relationship="Self.FK__Order_Sta__Order__22AA2996" FromRole="Orders" ToRole="Order_Status" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Orders__Id_User__1ED998B2" FromRole="Orders" ToRole="Users" />
+          <NavigationProperty Name="Processings" Relationship="Self.FK__Processin__Order__2C3393D0" FromRole="Orders" ToRole="Processing" />
+        </EntityType>
+        <EntityType Name="Processing">
+          <Key>
+            <PropertyRef Name="Processing_Id" />
+          </Key>
+          <Property Name="Processing_Id" Type="Guid" Nullable="false" />
+          <Property Name="Product_Id" Type="Guid" Nullable="false" />
+          <Property Name="Order_Id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Processin__Order__2C3393D0" FromRole="Processing" ToRole="Orders" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Processin__Produ__2B3F6F97" FromRole="Processing" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Product_Category">
+          <Key>
+            <PropertyRef Name="Category_Id" />
+          </Key>
+          <Property Name="Category_Id" Type="Guid" Nullable="false" />
+          <Property Name="Category_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Products__Produc__1273C1CD" FromRole="Product_Category" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Product_Id" />
+          </Key>
+          <Property Name="Product_Id" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Product_Category" Type="Guid" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Preparation_time" Type="Int32" Nullable="false" />
+          <Property Name="Product_Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Processings" Relationship="Self.FK__Processin__Produ__2B3F6F97" FromRole="Products" ToRole="Processing" />
+          <NavigationProperty Name="Product_Category1" Relationship="Self.FK__Products__Produc__1273C1CD" FromRole="Products" ToRole="Product_Category" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id_User" />
+          </Key>
+          <Property Name="Id_User" Type="Guid" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="User_Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="User_Address" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Loyal_Customers" Relationship="Self.FK__Loyal_Cus__Id_Us__173876EA" FromRole="Users" ToRole="Loyal_Customers" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Id_User__1ED998B2" FromRole="Users" ToRole="Orders" />
+          <NavigationProperty Name="Vouchers" Relationship="Self.FK__Vouchers__Id_Use__1A14E395" FromRole="Users" ToRole="Vouchers" />
+        </EntityType>
+        <EntityType Name="Voucher">
+          <Key>
+            <PropertyRef Name="Voucher_Id" />
+          </Key>
+          <Property Name="Voucher_Id" Type="Guid" Nullable="false" />
+          <Property Name="Id_User" Type="Guid" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="Valability" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Vouchers__Id_Use__1A14E395" FromRole="Vouchers" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK__Bill__Order_Id__286302EC">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+          <End Role="Bill" Type="Self.Bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Order_Id" />
+            </Principal>
+            <Dependent Role="Bill">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__Courier___1FCDBCEB">
+          <End Role="Couriers" Type="Self.Courier" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Couriers">
+              <PropertyRef Name="Courier_Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="Courier_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Loyal_Cus__Id_Us__173876EA">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Loyal_Customers" Type="Self.Loyal_Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id_User" />
+            </Principal>
+            <Dependent Role="Loyal_Customers">
+              <PropertyRef Name="Id_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Order_Rev__Order__25869641">
+          <End Role="Orders" Type="Self.Order" Multiplicity="0..1" />
+          <End Role="Order_Reviews" Type="Self.Order_Reviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Order_Id" />
+            </Principal>
+            <Dependent Role="Order_Reviews">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Order_Sta__Order__22AA2996">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+          <End Role="Order_Status" Type="Self.Order_Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Order_Id" />
+            </Principal>
+            <Dependent Role="Order_Status">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__Id_User__1ED998B2">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id_User" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="Id_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Processin__Order__2C3393D0">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+          <End Role="Processing" Type="Self.Processing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Order_Id" />
+            </Principal>
+            <Dependent Role="Processing">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Processin__Produ__2B3F6F97">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="Processing" Type="Self.Processing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="Product_Id" />
+            </Principal>
+            <Dependent Role="Processing">
+              <PropertyRef Name="Product_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Produc__1273C1CD">
+          <End Role="Product_Category" Type="Self.Product_Category" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_Category">
+              <PropertyRef Name="Category_Id" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="Product_Category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Vouchers__Id_Use__1A14E395">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Vouchers" Type="Self.Voucher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id_User" />
+            </Principal>
+            <Dependent Role="Vouchers">
+              <PropertyRef Name="Id_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RestaurantEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bills" EntityType="Self.Bill" />
+          <EntitySet Name="Couriers" EntityType="Self.Courier" />
+          <EntitySet Name="Loyal_Customers" EntityType="Self.Loyal_Customers" />
+          <EntitySet Name="Order_Reviews" EntityType="Self.Order_Reviews" />
+          <EntitySet Name="Order_Status" EntityType="Self.Order_Status" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="Processings" EntityType="Self.Processing" />
+          <EntitySet Name="Product_Category" EntityType="Self.Product_Category" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Vouchers" EntityType="Self.Voucher" />
+          <AssociationSet Name="FK__Bill__Order_Id__286302EC" Association="Self.FK__Bill__Order_Id__286302EC">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Bill" EntitySet="Bills" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__Courier___1FCDBCEB" Association="Self.FK__Orders__Courier___1FCDBCEB">
+            <End Role="Couriers" EntitySet="Couriers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Loyal_Cus__Id_Us__173876EA" Association="Self.FK__Loyal_Cus__Id_Us__173876EA">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Loyal_Customers" EntitySet="Loyal_Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Order_Rev__Order__25869641" Association="Self.FK__Order_Rev__Order__25869641">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Order_Reviews" EntitySet="Order_Reviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Order_Sta__Order__22AA2996" Association="Self.FK__Order_Sta__Order__22AA2996">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Order_Status" EntitySet="Order_Status" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__Id_User__1ED998B2" Association="Self.FK__Orders__Id_User__1ED998B2">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Processin__Order__2C3393D0" Association="Self.FK__Processin__Order__2C3393D0">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Processing" EntitySet="Processings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Processin__Produ__2B3F6F97" Association="Self.FK__Processin__Produ__2B3F6F97">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Processing" EntitySet="Processings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Produc__1273C1CD" Association="Self.FK__Products__Produc__1273C1CD">
+            <End Role="Product_Category" EntitySet="Product_Category" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Vouchers__Id_Use__1A14E395" Association="Self.FK__Vouchers__Id_Use__1A14E395">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Vouchers" EntitySet="Vouchers" />
+          </AssociationSet>
+          <FunctionImport Name="Insert_Bill">
+            <Parameter Name="BillId" Mode="In" Type="Guid" />
+            <Parameter Name="OrderId" Mode="In" Type="Guid" />
+            <Parameter Name="Total" Mode="In" Type="Double" />
+            <Parameter Name="Data" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_Category">
+            <Parameter Name="Category_Id" Mode="In" Type="Guid" />
+            <Parameter Name="Category_Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_Courier">
+            <Parameter Name="CourierId" Mode="In" Type="Guid" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Phone" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_Loyal_Customer">
+            <Parameter Name="LoialityId" Mode="In" Type="Guid" />
+            <Parameter Name="IdUser" Mode="In" Type="Guid" />
+            <Parameter Name="Period" Mode="In" Type="DateTime" />
+            <Parameter Name="Total" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_Order">
+            <Parameter Name="Order_Id" Mode="In" Type="Guid" />
+            <Parameter Name="IdUser" Mode="In" Type="Guid" />
+            <Parameter Name="CourierId" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_Order_Status">
+            <Parameter Name="Status_Id" Mode="In" Type="Guid" />
+            <Parameter Name="Order_Id" Mode="In" Type="Guid" />
+            <Parameter Name="Order_Status" Mode="In" Type="String" />
+            <Parameter Name="Last_Update" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_Processing">
+            <Parameter Name="Processing_Id" Mode="In" Type="Guid" />
+            <Parameter Name="Product_Id" Mode="In" Type="Guid" />
+            <Parameter Name="Order_Id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_Product">
+            <Parameter Name="Product_Id" Mode="In" Type="Guid" />
+            <Parameter Name="ProductName" Mode="In" Type="String" />
+            <Parameter Name="Category_Id" Mode="In" Type="Guid" />
+            <Parameter Name="Price" Mode="In" Type="Double" />
+            <Parameter Name="Time" Mode="In" Type="Int32" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_Review">
+            <Parameter Name="Review_Id" Mode="In" Type="Guid" />
+            <Parameter Name="Order_Id" Mode="In" Type="Guid" />
+            <Parameter Name="Mark" Mode="In" Type="Int32" />
+            <Parameter Name="Details" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_User">
+            <Parameter Name="CustomerName" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="Phone" Mode="In" Type="String" />
+            <Parameter Name="Address" Mode="In" Type="String" />
+            <Parameter Name="IdUser" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="Set_Voucher">
+            <Parameter Name="IdUser" Mode="In" Type="Guid" />
+            <Parameter Name="Value" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(RestaurantModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(RestaurantModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="User_Login">
+            <Parameter Name="CustomerName" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="IdUser" Mode="InOut" Type="Guid" />
+            <Parameter Name="Telefon" Mode="InOut" Type="String" />
+            <Parameter Name="Voucher" Mode="InOut" Type="Double" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RestaurantModelStoreContainer" CdmEntityContainer="RestaurantEntities">
+          <EntitySetMapping Name="Bills">
+            <EntityTypeMapping TypeName="RestaurantModel.Bill">
+              <MappingFragment StoreEntitySet="Bill">
+                <ScalarProperty Name="Bill_Id" ColumnName="Bill_Id" />
+                <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Billing_Date" ColumnName="Billing_Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Couriers">
+            <EntityTypeMapping TypeName="RestaurantModel.Courier">
+              <MappingFragment StoreEntitySet="Couriers">
+                <ScalarProperty Name="Courier_Id" ColumnName="Courier_Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Loyal_Customers">
+            <EntityTypeMapping TypeName="RestaurantModel.Loyal_Customers">
+              <MappingFragment StoreEntitySet="Loyal_Customers">
+                <ScalarProperty Name="Orders" ColumnName="Orders" />
+                <ScalarProperty Name="Loiality_Id" ColumnName="Loiality_Id" />
+                <ScalarProperty Name="Id_User" ColumnName="Id_User" />
+                <ScalarProperty Name="Period" ColumnName="Period" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order_Reviews">
+            <EntityTypeMapping TypeName="RestaurantModel.Order_Reviews">
+              <MappingFragment StoreEntitySet="Order_Reviews">
+                <ScalarProperty Name="Review_Id" ColumnName="Review_Id" />
+                <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
+                <ScalarProperty Name="Mark" ColumnName="Mark" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order_Status">
+            <EntityTypeMapping TypeName="RestaurantModel.Order_Status">
+              <MappingFragment StoreEntitySet="Order_Status">
+                <ScalarProperty Name="Status_Id" ColumnName="Status_Id" />
+                <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
+                <ScalarProperty Name="Order_Status1" ColumnName="Order_Status" />
+                <ScalarProperty Name="Last_Update" ColumnName="Last_Update" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="RestaurantModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
+                <ScalarProperty Name="Id_User" ColumnName="Id_User" />
+                <ScalarProperty Name="Courier_Id" ColumnName="Courier_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Processings">
+            <EntityTypeMapping TypeName="RestaurantModel.Processing">
+              <MappingFragment StoreEntitySet="Processing">
+                <ScalarProperty Name="Processing_Id" ColumnName="Processing_Id" />
+                <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
+                <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product_Category">
+            <EntityTypeMapping TypeName="RestaurantModel.Product_Category">
+              <MappingFragment StoreEntitySet="Product_Category">
+                <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
+                <ScalarProperty Name="Category_Name" ColumnName="Category_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="RestaurantModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Product_Category" ColumnName="Product_Category" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Preparation_time" ColumnName="Preparation_time" />
+                <ScalarProperty Name="Product_Description" ColumnName="Product_Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="RestaurantModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="RestaurantModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Id_User" ColumnName="Id_User" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="User_Password" ColumnName="User_Password" />
+                <ScalarProperty Name="User_Address" ColumnName="User_Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vouchers">
+            <EntityTypeMapping TypeName="RestaurantModel.Voucher">
+              <MappingFragment StoreEntitySet="Vouchers">
+                <ScalarProperty Name="Voucher_Id" ColumnName="Voucher_Id" />
+                <ScalarProperty Name="Id_User" ColumnName="Id_User" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Valability" ColumnName="Valability" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Insert_Bill" FunctionName="RestaurantModel.Store.Insert_Bill" />
+          <FunctionImportMapping FunctionImportName="Insert_Category" FunctionName="RestaurantModel.Store.Insert_Category" />
+          <FunctionImportMapping FunctionImportName="Insert_Courier" FunctionName="RestaurantModel.Store.Insert_Courier" />
+          <FunctionImportMapping FunctionImportName="Insert_Loyal_Customer" FunctionName="RestaurantModel.Store.Insert_Loyal_Customer" />
+          <FunctionImportMapping FunctionImportName="Insert_Order" FunctionName="RestaurantModel.Store.Insert_Order" />
+          <FunctionImportMapping FunctionImportName="Insert_Order_Status" FunctionName="RestaurantModel.Store.Insert_Order_Status" />
+          <FunctionImportMapping FunctionImportName="Insert_Processing" FunctionName="RestaurantModel.Store.Insert_Processing" />
+          <FunctionImportMapping FunctionImportName="Insert_Product" FunctionName="RestaurantModel.Store.Insert_Product" />
+          <FunctionImportMapping FunctionImportName="Insert_Review" FunctionName="RestaurantModel.Store.Insert_Review" />
+          <FunctionImportMapping FunctionImportName="Insert_User" FunctionName="RestaurantModel.Store.Insert_User" />
+          <FunctionImportMapping FunctionImportName="Set_Voucher" FunctionName="RestaurantModel.Store.Set_Voucher" />
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="RestaurantModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="RestaurantModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="RestaurantModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="RestaurantModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RestaurantModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="RestaurantModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RestaurantModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="RestaurantModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="RestaurantModel.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="User_Login" FunctionName="RestaurantModel.Store.User_Login" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
