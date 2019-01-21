@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ServerApp.DatabaseConnection
 {
     class DataManager
@@ -25,21 +26,39 @@ namespace ServerApp.DatabaseConnection
         }
 
         #region Methods Customer
-        public static void Login(string username, string password)
+        public static List<string> Login(string username, string password)
         {
-            using (var ctx = new RestaurantEntities())
+            using (var context = new RestaurantEntities())
             {
                 //Check if a user exits
                 ObjectParameter userId = new ObjectParameter("UserId", new Guid());
                 ObjectParameter phone = new ObjectParameter("Phone",string.Empty);
                 ObjectParameter voucher = new ObjectParameter("Voucher", 0 );
-                ctx.User_Login("Domide Adrian", "12345", userId, phone,voucher);
+                context.User_Login("Domide Adrian", "12345", userId, phone,voucher);
 
-                //If exist a have the user guid id 
-                Console.WriteLine(userId.Value.ToString());
-                Console.WriteLine(phone.Value.ToString());
-                Console.WriteLine(voucher.Value.ToString());
+                //Generate message
+                List<string> words = new List<string>();
+                if (new Guid(userId.Value.ToString()) != new Guid())
+                {
+                    //Succesfully connected
+                    words.Add("LOGIN_OK;");
+                    words.Add(userId.Value.ToString() + ';');
+                    words.Add(phone.Value.ToString() + ';');
+                    words.Add(voucher.Value.ToString() + ';');
+                }
+                else
+                    //ERROR
+                    words.Add("LOGIN_ERROR;");
+                return words;
             }
+        }
+
+        public static List<string> Register(List<string> list)
+        {
+            Insert_User(list[1], list[2], list[3], list[4]);
+            List<string> words = new List<string>();
+            words.Add("REGISTER_OK;");
+            return words;
         }
 
         public static List<string> CategoryName(string categoryName)
@@ -189,23 +208,29 @@ namespace ServerApp.DatabaseConnection
                 context.Insert_Bill(Guid.NewGuid(), orderId, total, data);
             }
         }
-
-        public static void Insert_Category(string name)
+        
+        public static List<string> Insert_Category(string name)
         {
             using (var context = new RestaurantEntities())
             {
                 context.Insert_Category(Guid.NewGuid(), name);
+                List<string> words = new List<string>()
+                { "INSERT_CATEGORY_OK;" };
+                return words;
             }
         }
-
-        public static void Insert_Courier(string name, string phone)
+        
+        public static List<string> Insert_Courier(string name, string phone)
         {
             using (var context = new RestaurantEntities())
             {
                 context.Insert_Courier(Guid.NewGuid(), name, phone);
-            }
+                List<string> words = new List<string>
+                { "INSERT_COURIER_OK;" };
+                return words;
+            }  
         }
-
+        //de vazut loyal customers
         public static void Insert_Loyal_Customer(Guid userId, DateTime data, double total)
         {
             using (var context = new RestaurantEntities())
@@ -214,12 +239,16 @@ namespace ServerApp.DatabaseConnection
             }
         }
 
-        public static void Insert_Order(Guid userID, Guid courierId)
+        public static List<string> Insert_Order(List<string> list)
         {
             using (var context = new RestaurantEntities())
             {
-                context.Insert_Order(Guid.NewGuid(), userID, courierId);
-
+                context.Insert_Order(Guid.NewGuid(), new Guid(list[1]), new Guid());
+                for (int iter = 2; iter < list.Count(); iter++)
+                    Insert_Processing(new Guid(list[iter]), new Guid(list[1]));
+                List<string> words = new List<string>
+                {   "CREATE_COMMAND_OK;"  };
+                return words;
             }
         }
 

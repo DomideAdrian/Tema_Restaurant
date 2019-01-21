@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerApp.DatabaseConnection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,17 @@ using System.Threading.Tasks;
 
 namespace ServerApp.AppConnection
 {
-    static class MessageProcessor
+    public static class MessageProcessor
     {
         #region Methods
+        public static string ProcessMessage(string recMessage)
+        {
+            List<string> words = new List<string>();
+            words = SplitMessage(recMessage);
+            List<string> result = InterpretMessage(words);
+            return string.Empty;
+        }
+
         public static List<string> SplitMessage(string message)
         {
             List<string> messageList = new List<string>();
@@ -30,16 +39,20 @@ namespace ServerApp.AppConnection
             return message;
         }
 
-        public static void InterpretMessage(List<string> list)
+        public static List<string> InterpretMessage(List<string> list)
         {
             switch(list[0])
             {
                 case "LOGIN":
-                    break;  
+                    return DataManager.Login(list[1], list[2]);
                 case "REGISTER":
-                    break;
-                case "INSERT":
-                    break;
+                    return DataManager.Register(list);
+                case "INSERT_CATEGORY":
+                    return DataManager.Insert_Category(list[1]);
+                case "INSERT_COURIER":
+                    return DataManager.Insert_Courier(list[1], list[2]);
+                case "CREATE_ORDER":
+                    return DataManager.Insert_Order(list);
                 case "REQUEST_CATEGORY":
                     break;
                 case "REQUEST_CATEGORY_NAME":
@@ -52,6 +65,7 @@ namespace ServerApp.AppConnection
                     break;
 
             }
+            return new List<string>();
         }
 
         #endregion

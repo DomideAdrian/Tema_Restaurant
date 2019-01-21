@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ServerApp.AppConnection;
 
 namespace ServerApp.AppConnection
 {
     class ConnectionManager
     {
-        static readonly TcpListener listener = null;
-
         #region Methods
-        static ConnectionManager()
+        public ConnectionManager()
         {
-            listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 8080);
+            InitializeServer();
         }
 
-        private static void ProcessClientRequests(object argument)
+        public void ProcessClientRequests(object argument)
         {
             TcpClient client = (TcpClient)argument;
             try
@@ -28,11 +25,10 @@ namespace ServerApp.AppConnection
                 StreamReader reader = new StreamReader(client.GetStream());
                 StreamWriter writer = new StreamWriter(client.GetStream());
 
-                string recived = String.Empty;
-                while (!(recived = reader.ReadLine()).Equals("Exit") || (recived == null))
+                string received = String.Empty;
+                while (!(received = reader.ReadLine()).Equals("Exit") || (received == null))
                 {
-                    Console.WriteLine("From client -> " + recived);
-                    writer.WriteLine("From server -> " + recived);
+                    writer.WriteLine(MessageProcessor.ProcessMessage(received));
                     writer.Flush();
                 }
                 reader.Close();
@@ -52,10 +48,12 @@ namespace ServerApp.AppConnection
             }
         }
 
-        private static void InitializeServer()
+        public void InitializeServer()
         {
+            TcpListener listener = null;
             try
             {
+                listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 8080);
                 listener.Start();
                 Console.WriteLine("MultiThreadEchoServer started ...");
                 while (true)
@@ -66,6 +64,7 @@ namespace ServerApp.AppConnection
                     Thread thread = new Thread(ProcessClientRequests);
                     thread.Start(client);
                 }
+
             }
             catch (Exception e)
             {
@@ -76,6 +75,7 @@ namespace ServerApp.AppConnection
                 if (listener != null)
                     listener.Stop();
             }
+
         }
 
         #endregion
