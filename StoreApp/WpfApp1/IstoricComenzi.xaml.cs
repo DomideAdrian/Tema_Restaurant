@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,25 +21,24 @@ namespace WpfApp1
 	/// </summary>
 	public partial class IstoricComenzi : Page
 	{
-		public IstoricComenzi()
+		public IstoricComenzi(ObservableCollection<DataProcessorModel> pvaluesDataGrid)
 		{
 			InitializeComponent();
-			for (int i = 0; i < 100; i++)
+
+
+
+			if (pvaluesDataGrid != null)
 			{
-				DataGridIstoricComenzi.Items.Add(new ComandaDetails()
+
+
+				foreach (var value in pvaluesDataGrid)
 				{
-					NrCrt = i,
-
-					NumeClient = "Aditu Domidutu" + i.ToString(),
-					Comanda = "pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste " + i.ToString(),
-					Adresa = "bd george cosbuc, nr 1-" + i.ToString(),
-					NrTelefon = "0769745164",
+					if (value.StagiuComanda == "Delivered")
+					{
+						DataGridIstoricComenzi.Items.Add(value);
+					}
 				}
-
-					);
 			}
-
-
 
 		}
 

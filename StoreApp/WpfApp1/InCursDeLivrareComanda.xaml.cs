@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,27 +21,21 @@ namespace WpfApp1
 	/// </summary>
 	public partial class InCursDeLivrareComanda : Page
 	{
-		public InCursDeLivrareComanda()
+		public InCursDeLivrareComanda(ObservableCollection<DataProcessorModel> pvaluesDataGrid)
 		{
 			InitializeComponent();
 
-			for (int i = 0; i < 100; i++)
+			if (pvaluesDataGrid != null)
 			{
-				DataGridLivrareComanda.Items.Add(new ComandaDetails()
+				
+				foreach (var value in pvaluesDataGrid)
 				{
-					NrCrt = i,
-
-					NumeClient = "Cordea Sebastian" + i.ToString(),
-					Comanda = "friptura si cartofi friptura si cartofi friptura si cartofi friptura si cartofi friptura si cartofi " + i.ToString(),
-					Adresa = "bd george cosbuc, nr 1-" + i.ToString(),
-					NrTelefon = "0769745164",
+					if (value.StagiuComanda == "Delivering")
+					{
+						DataGridLivrareComanda.Items.Add(value);
+					}
 				}
-
-					);
 			}
-
-
-
 
 		}
 

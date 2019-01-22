@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfApp1.Personal;
+using WpfApp1.ViewModel;
 
 namespace WpfApp1
 {
@@ -19,35 +23,29 @@ namespace WpfApp1
 	/// Interaction logic for AsteptareConfirmare.xaml
 	/// </summary>
 	public partial class AsteptareConfirmare : Page
+
 	{
-		public AsteptareConfirmare(string numePers)
+		//DataProcessorViewModel pProcessData = new DataProcessorViewModel();
+		 
+
+		public AsteptareConfirmare(ObservableCollection<DataProcessorModel> pvaluesDataGrid,string received_string)
 		{
 			InitializeComponent();
-		
-		
 
-			
-
-
-
-			for (int i = 0; i < 10; i++)
+			if (pvaluesDataGrid != null)
 			{
-				DataGridPage1.Items.Add(new ComandaDetails()
+
+				foreach (var value in pvaluesDataGrid)
 				{
-					NrCrt = i,
-
-					NumeClient = numePers + i.ToString(),
-					Comanda = "pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste pizza si paste " + i.ToString(),
-					Adresa = "bd george cosbuc, nr 1-" + i.ToString(),
-					NrTelefon = "0769745164",
+					if (value.StagiuComanda == "Waiting")
+					{
+						DataGridPage1.Items.Add(value);
+					}
 				}
-
-					);
 			}
-
-		
-
+	
 		}
+
 
 		private void DataGridCell_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
@@ -62,9 +60,6 @@ namespace WpfApp1
 				row.DetailsVisibility = row.IsSelected ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
 			}
 		}
-		public string ceva()
-		{
-			return "void";
-		}
+		
 	}
 }

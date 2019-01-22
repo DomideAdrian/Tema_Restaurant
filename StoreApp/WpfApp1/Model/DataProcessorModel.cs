@@ -12,6 +12,22 @@ namespace WpfApp1
 
 		private string _NumeClient;
 
+		private string _id_client;
+
+		public string Id_client 
+		{
+			get { return _id_client; }
+			set { _id_client = value; }
+		}
+		private string _preparetionTime;
+
+		public string PreparetionTime
+		{
+			get { return _preparetionTime; }
+			set { _preparetionTime = value; }
+		}
+
+
 		public string NumeClient 
 		{
 			get { return _NumeClient; }
@@ -47,7 +63,15 @@ namespace WpfApp1
 			set { _NrTelefon = value; }
 		}
 
-		
+		private int _nrCrt;
+
+		public int NrCrt 
+		{
+			get { return _nrCrt; }
+			set { _nrCrt = value; }
+		}
+
+
 
 
 

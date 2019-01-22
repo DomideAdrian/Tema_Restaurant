@@ -61,6 +61,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Personal\Angajati.cs" />
     <Compile Include="ViewModel\DataProcessorViewModel.cs" />
     <Page Include="AsteptareConfirmare.xaml">
       <SubType>Designer</SubType>

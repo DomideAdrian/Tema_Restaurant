@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,28 +21,28 @@ namespace WpfApp1
 	/// </summary>
 	public partial class PreparareComanda : Page
 	{
-		public PreparareComanda()
+		public PreparareComanda(ObservableCollection<DataProcessorModel> pvaluesDataGrid)
 		{
 			InitializeComponent();
 
-			for (int i = 0; i < 100; i++)
+
+
+
+
+
+
+			if (pvaluesDataGrid != null)
 			{
-				DataGridPagePreparareComanda.Items.Add(new ComandaDetails()
+
+
+				foreach (var value in pvaluesDataGrid)
 				{
-					NrCrt = i,
-
-					NumeClient = "Cristian Chindris" + i.ToString(),
-					Comanda = "friptura si cartofi friptura si cartofi friptura si cartofi friptura si cartofi friptura si cartofi " + i.ToString(),
-					Adresa = "bd george cosbuc, nr 1-" + i.ToString(),
-					NrTelefon = "0769745164",
+					if (value.StagiuComanda == "Preparing"|| value.StagiuComanda =="Confirm To Be Delivered")
+					{
+						DataGridPagePreparareComanda.Items.Add(value);
+					}
 				}
-
-					);
 			}
-
-
-
-
 		}
 
 		private void DataGridCell_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
