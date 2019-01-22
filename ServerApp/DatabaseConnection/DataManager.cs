@@ -17,9 +17,10 @@ namespace ServerApp.DatabaseConnection
             using (var context = new RestaurantEntities())
             {
                 List<string> words = new List<string>();
+                words.Add("CATEGORY;");
                 foreach (var item in context.Product_Category)
                 {
-                    words.Add(item.Category_Name.ToString());
+                    words.Add(item.Category_Name.ToString() + ';');
                 }
                 return words;
             }
@@ -53,14 +54,6 @@ namespace ServerApp.DatabaseConnection
             }
         }
 
-        public static List<string> Register(List<string> list)
-        {
-            Insert_User(list[1], list[2], list[3], list[4]);
-            List<string> words = new List<string>();
-            words.Add("REGISTER_OK;");
-            return words;
-        }
-
         public static List<string> CategoryName(string categoryName)
         {
             using (var context = new RestaurantEntities())
@@ -77,12 +70,13 @@ namespace ServerApp.DatabaseConnection
                                 r.Preparation_time,
                                 r.Product_Description
                             };
+                words.Add("CATEGORY_PRODUCTS;");
                 foreach (var item in results)
                 {
-                    words.Add(item.Name.ToString());
-                    words.Add(item.Price.ToString());
-                    words.Add(item.Preparation_time.ToString());
-                    words.Add(item.Product_Description.ToString());
+                    words.Add(item.Name.ToString() + ';');
+                    words.Add(item.Price.ToString() + ';');
+                    words.Add(item.Preparation_time.ToString() + ';');
+                    words.Add(item.Product_Description.ToString() + ';');
                 }
                 return words;
             }
@@ -92,7 +86,7 @@ namespace ServerApp.DatabaseConnection
         {
             using (var context = new RestaurantEntities())
             {
-                List<string> words = new List<string>();
+                List<string> words = new List<string>() { "ORDER_DETAILS;"};
                 var result = from s in context.Order_Status
                              join o in context.Orders
                              on s.Order_Id equals o.Order_Id
@@ -108,10 +102,10 @@ namespace ServerApp.DatabaseConnection
                              };
                 foreach(var item in result)
                 {
-                    words.Add(item.Order_Status1.ToString());
-                    words.Add(item.Last_Update.ToString());
-                    words.Add(item.Name.ToString());
-                    words.Add(item.Phone.ToString());
+                    words.Add(item.Order_Status1.ToString() + ';');
+                    words.Add(item.Last_Update.ToString() + ';');
+                    words.Add(item.Name.ToString() + ';');
+                    words.Add(item.Phone.ToString() + ';');
                 }
                 return words;
             }
@@ -124,7 +118,7 @@ namespace ServerApp.DatabaseConnection
         {
             using (var context = new RestaurantEntities())
             {
-                List<string> words = new List<string>();
+                List<string> words = new List<string>() { "ORDERS;" };
                 var results = from o in context.Orders
                             join s in context.Order_Status
                             on o.Order_Id equals s.Order_Id
@@ -141,10 +135,10 @@ namespace ServerApp.DatabaseConnection
 
                 foreach(var item in results)
                 {
-                    words.Add(item.Order_Id.ToString());
-                    words.Add(item.Username.ToString());
-                    words.Add(item.Phone.ToString());
-                    words.Add(item.User_Address.ToString());
+                    words.Add(item.Order_Id.ToString() + ';');
+                    words.Add(item.Username.ToString() + ';');
+                    words.Add(item.Phone.ToString() + ';');
+                    words.Add(item.User_Address.ToString() + ';');
                     var rezProducts = from r in results
                                       join p in context.Processings
                                       on r.Order_Id equals p.Order_Id
@@ -156,27 +150,35 @@ namespace ServerApp.DatabaseConnection
                                          prod.Name,
                                          prod.Preparation_time
                                       };
+                    int max = 0;
                     foreach (var prod in rezProducts)
                     {
-                        words.Add(prod.Name.ToString());
-                        words.Add(prod.Preparation_time.ToString());
+                        max = Math.Max(max,Convert.ToInt32(prod.Preparation_time));
                     }
+                    words.Add(Convert.ToString(max) + ';');
+                    foreach (var prod in rezProducts)
+                    {
+                        words.Add(prod.Name.ToString() + ';');
+                    }
+                    words.Add("...;");
                 }
                 return words;
             }
         }
 
-        public static void ChangeStatus(Guid orderId, string status)
+        public static List<string> ChangeStatus(Guid orderId, string status)
         {
             using (var context = new RestaurantEntities())
             {
                 var result = (from c in context.Order_Status
                              where c.Order_Id.Equals(orderId)
                              select c).First();
+                if (status.Equals("In delivery"))
+                    GenerateBill(orderId);
                 result.Order_Status1 = status;
                 result.Last_Update = DateTime.Now;
                 context.SaveChanges();
-
+                return new List<string>() { "CHANGE_STATUS_OK;" };
             }
         }
 
@@ -209,46 +211,12 @@ namespace ServerApp.DatabaseConnection
             }
         }
         
-        public static List<string> Insert_Category(string name)
-        {
-            using (var context = new RestaurantEntities())
-            {
-                context.Insert_Category(Guid.NewGuid(), name);
-                List<string> words = new List<string>()
-                { "INSERT_CATEGORY_OK;" };
-                return words;
-            }
-        }
-        
-        public static List<string> Insert_Courier(string name, string phone)
-        {
-            using (var context = new RestaurantEntities())
-            {
-                context.Insert_Courier(Guid.NewGuid(), name, phone);
-                List<string> words = new List<string>
-                { "INSERT_COURIER_OK;" };
-                return words;
-            }  
-        }
         //de vazut loyal customers
         public static void Insert_Loyal_Customer(Guid userId, DateTime data, double total)
         {
             using (var context = new RestaurantEntities())
             {
                 context.Insert_Loyal_Customer(Guid.NewGuid(), userId, data, total);
-            }
-        }
-
-        public static List<string> Insert_Order(List<string> list)
-        {
-            using (var context = new RestaurantEntities())
-            {
-                context.Insert_Order(Guid.NewGuid(), new Guid(list[1]), new Guid());
-                for (int iter = 2; iter < list.Count(); iter++)
-                    Insert_Processing(new Guid(list[iter]), new Guid(list[1]));
-                List<string> words = new List<string>
-                {   "CREATE_COMMAND_OK;"  };
-                return words;
             }
         }
 
@@ -268,35 +236,79 @@ namespace ServerApp.DatabaseConnection
             }
         }
 
-        public static void Insert_Product(string name, Guid categoryId, double price, int time, string description)
-        {
-            using (var context = new RestaurantEntities())
-            {
-                context.Insert_Product(Guid.NewGuid(), name, categoryId, price, time, description);
-            }
-        }
-
-        public static void Insert_Review(Guid orderId, int mark, string details)
-        {
-            using (var context = new RestaurantEntities())
-            {
-                context.Insert_Review(Guid.NewGuid(), orderId, mark, details);
-            }
-        }
-
-        public static void Insert_User(string name, string password, string phone, string address)
-        {
-            using (var context = new RestaurantEntities())
-            {
-                context.Insert_User(name, password, phone, address, Guid.NewGuid());
-            }
-        }
-
+        //de vazut voucher
         public static void Set_Voucher(Guid userId, double value)
         {
             using (var context = new RestaurantEntities())
             {
                 context.Set_Voucher(userId, value);
+            }
+        }
+
+
+        public static List<string> Insert_Category(string name)
+        {
+            using (var context = new RestaurantEntities())
+            {
+                context.Insert_Category(Guid.NewGuid(), name);
+                return new List<string>() { "INSERT_CATEGORY_OK;" }; ;
+            }
+        }
+
+        public static List<string> Insert_Courier(string name, string phone)
+        {
+            using (var context = new RestaurantEntities())
+            {
+                context.Insert_Courier(Guid.NewGuid(), name, phone);
+                return new List<string> { "INSERT_COURIER_OK;" };
+            }
+        }
+
+        public static List<string> Insert_Product(string name, string catName, double price, int time, string description)
+        {
+            using (var context = new RestaurantEntities())
+            {
+                var categoryId = new Guid((from c in context.Product_Category
+                                           where c.Category_Name.Equals(catName)
+                                           select new { c.Category_Id }).First().ToString());
+                context.Insert_Product(Guid.NewGuid(), name, categoryId, price, time, description);
+                return new List<string>() { "INSERT_PRODUCT_OK;" };
+            }
+        }
+
+        public static List<string> Insert_Review(Guid orderId, int mark, string details)
+        {
+            using (var context = new RestaurantEntities())
+            {
+                context.Insert_Review(Guid.NewGuid(), orderId, mark, details);
+                List<string> words = new List<string>()
+                { "INSERT_REVIEW_OK;" };
+                return words;
+            }
+        }
+
+        public static List<string> Insert_User(string name, string password, string phone, string address)
+        {
+            using (var context = new RestaurantEntities())
+            {
+                context.Insert_User(name, password, phone, address, Guid.NewGuid());
+                List<string> words = new List<string>()
+                { "REGISTER_OK;" };
+                return words;
+            }
+        }
+
+        public static List<string> Insert_Order(List<string> list)
+        {
+            using (var context = new RestaurantEntities())
+            {
+                context.Insert_Order(Guid.NewGuid(), new Guid(list[1]), new Guid());
+                Insert_Order_Status(new Guid(list[1]), "Waiting", DateTime.Now);
+                for (int iter = 2; iter < list.Count(); iter++)
+                    Insert_Processing(new Guid(list[iter]), new Guid(list[1]));
+                List<string> words = new List<string>
+                {   "CREATE_COMMAND_OK;"  };
+                return words;
             }
         }
 

@@ -46,23 +46,27 @@ namespace ServerApp.AppConnection
                 case "LOGIN":
                     return DataManager.Login(list[1], list[2]);
                 case "REGISTER":
-                    return DataManager.Register(list);
+                    return DataManager.Insert_User(list[1], list[2], list[3], list[4]); ;
                 case "INSERT_CATEGORY":
                     return DataManager.Insert_Category(list[1]);
                 case "INSERT_COURIER":
                     return DataManager.Insert_Courier(list[1], list[2]);
                 case "CREATE_ORDER":
                     return DataManager.Insert_Order(list);
+                case "INSERT_PRODUCT":
+                    return DataManager.Insert_Product(list[1], list[2], Convert.ToDouble(list[3]), Convert.ToInt32(list[4]), list[5]);
+                case "CREATE_REVIEW":
+                    return DataManager.Insert_Review(new Guid(list[1]), Convert.ToInt32(list[2]), list[3]);
                 case "REQUEST_CATEGORY":
-                    break;
-                case "REQUEST_CATEGORY_NAME":
-                    break;
+                    return DataManager.GetCategories();
+                case "REQUEST_CATEGORY_PRODUCTS":
+                    return DataManager.CategoryName(list[1]);
                 case "REQUEST_ORDERS":
-                    break;
+                    return DataManager.GetOrders();
                 case "CHANGE_STATUS":
-                    break;
-                case "GET_STATUS":
-                    break;
+                    return DataManager.ChangeStatus(new Guid(list[1]), list[2]);
+                case "REQUEST_ORDER_DETAILS":
+                    return DataManager.GetOrderDetails(new Guid(list[1]));
 
             }
             return new List<string>();
