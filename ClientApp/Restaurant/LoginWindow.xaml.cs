@@ -52,6 +52,8 @@ namespace Restaurant
             };
             string requestString = loginRequest.WeldPhrase("LOGIN", credentials); //creez mesajul pe care il trimit la server
 
+
+
             string ackString = loginAck.GetPhrase(requestString); //primesc mesaj de la server
             string accept = loginAck.SplitPhrase(ackString, 0);
             if (accept == "LOGIN_ERROR") //verific daca ma pot loga sau nu
@@ -70,7 +72,7 @@ namespace Restaurant
                         UsernameProperty = username
                     };
                     app.Show();
-                    
+
                     Close();
                 }
                 else

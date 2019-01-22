@@ -68,7 +68,7 @@
                 </Grid>
             </Grid>-->
 
-            <ListBox ScrollViewer.CanContentScroll="False" Name="Drinks" ItemsSource="{Binding}" Width="600">
+            <!--<ListBox ScrollViewer.CanContentScroll="False" Name="Drinks" ItemsSource="{Binding}" Width="600">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
 
@@ -83,7 +83,42 @@
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-            </ListBox>
+            </ListBox>-->
+
+            <StackPanel Orientation="Horizontal">
+                <DockPanel Margin="10,10">
+                    <StackPanel DockPanel.Dock="Right" Margin="10,0">
+                        <StackPanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Margin" Value="0,0,0,5" />
+
+                            </Style>
+                        </StackPanel.Resources>
+                    </StackPanel>
+
+                    <ListBox ScrollViewer.CanContentScroll="False" Name="Drinks" Width="600" ItemsSource="{Binding}">
+                        <!-- ItemsSource="{Binding DrinkingList}"> -->
+                        <!--SelectedItem="{Binding SelectedDrink}" > -->
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="2">
+                                    <CheckBox Content="Add to Basket" Height="100" Width="100" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding IsCheked}"/>
+                                    <TextBlock Text="{Binding DrinkName}" FontSize="22" Foreground="#FFC00000"/>
+                                    <Image Source="{Binding ImageSource}" Width="200" Height="250" Stretch="UniformToFill"/>
+                                    <TextBlock Text="{Binding DrinkDescription}" FontSize="8" Margin="5"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="{Binding DrinkPrice}" VerticalAlignment="Center" Margin="10" FontSize="20"/>
+
+                                        <!--<Button x:Name="ButtonOrder" Width="100" Content="Order" Margin="10" Click="ButtonOrder_Click"/>-->
+                                    </StackPanel>
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+                <Button x:Name="ButtonAddToBasket" Content="Add" Height="40" Width="90" VerticalAlignment="Center" HorizontalAlignment="Right" Click="ButtonAddToBasket_Click"/>
+            </StackPanel>
         </materialDesign:TransitioningContent>
     </Grid>
 </UserControl>

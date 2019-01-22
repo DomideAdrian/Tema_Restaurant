@@ -14,6 +14,6 @@ namespace Restaurant
         public string ImageSource { get; set; }
         public string DrinkDescription { get; set; }
         public string DrinkPrice { get; set; }
-
+        public bool IsCheked { get; set; }
     }
 }

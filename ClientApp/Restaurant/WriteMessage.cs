@@ -10,10 +10,10 @@ namespace Restaurant
     {
         public string WeldPhrase(string flag, List<string> weldWord)
         {
-            string message = flag;
+            string message = flag + ";";
             foreach(var element in weldWord)
             {
-                message = message + ";" + element;
+                message = message + element + ";";
             }
             return message;
         }

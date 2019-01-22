@@ -64,14 +64,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Basket.cs" />
+    <Compile Include="BasketList.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Drink.xaml.cs">
       <DependentUpon>Drink.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DrinkList.cs" />
     <Compile Include="ObservableDrink.cs" />
     <Compile Include="ObservalbeCollection.cs" />
     <Compile Include="ReadMessage.cs" />
+    <Compile Include="ShowShopList.cs" />
     <Compile Include="UserControlAccount.xaml.cs">
       <DependentUpon>UserControlAccount.xaml</DependentUpon>
     </Compile>

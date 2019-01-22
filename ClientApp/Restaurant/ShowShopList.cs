@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Restaurant
 {
-    public class DrinkList
+    public class ShowShopList
     {
-        public List<string> name_of_drinks = new List<string>();
-        public int index = 0;
+        public string NameOfItem { get; set; }
+        public string PriceOfItem { get; set; }
     }
 }

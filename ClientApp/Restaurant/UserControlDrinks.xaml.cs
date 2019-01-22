@@ -21,7 +21,7 @@ namespace Restaurant
     /// </summary>
     public partial class UserControlDrinks : UserControl
     {
-       /* private ObservableDrink selectdDrink;
+        private ObservableDrink selectdDrink;
         public ObservableDrink SelectedDrink
         {
             get
@@ -33,9 +33,10 @@ namespace Restaurant
                 selectdDrink = value;
             }
         }
-        */
+        
         ObservableCollection<ObservableDrink> drinks = new ObservableCollection<ObservableDrink>();
-        /*public ObservableCollection<ObservableDrink> DrinkingList
+
+        public ObservableCollection<ObservableDrink> DrinkingList
         {
             get
             {
@@ -50,13 +51,13 @@ namespace Restaurant
             {
                 drinks = value;
             }
-        }*/
+        }
 
         public UserControlDrinks()
         {
             InitializeComponent();
             DataContext = GetDrink();
-
+            //DataContext = this;
 
         }
         public ObservableCollection<ObservableDrink> GetDrink()
@@ -66,7 +67,9 @@ namespace Restaurant
                 DrinkName = "Cola",
                 ImageSource = "Assets/Cola.png",
                 DrinkDescription = "GOOOOOOOD COLA",
-                DrinkPrice = "3$"
+                DrinkPrice = "3$",
+                IsCheked = false
+
             });
 
             drinks.Add(new ObservableDrink()
@@ -74,22 +77,38 @@ namespace Restaurant
                 DrinkName = "Jack Daniels",
                 ImageSource = "Assets/JD.png",
                 DrinkDescription = "DDD",
-                DrinkPrice = "10$"
+                DrinkPrice = "10$",
+                IsCheked = false
             });
             drinks.Add(new ObservableDrink()
             {
                 DrinkName = "Tea",
                 ImageSource = "Assets/Tea.png",
                 DrinkDescription = "TEA",
-                DrinkPrice = "4$"
+                DrinkPrice = "4$",
+                IsCheked = false
             });
 
             return drinks;
         }
 
-        private void ButtonOrder_Click(object sender, RoutedEventArgs e)
+        private void ButtonAddToBasket_Click(object sender, RoutedEventArgs e)
         {
-
+           // BasketList itemsToBuy = new BasketList();
+            foreach(var item in drinks)
+            {
+                if(item.IsCheked==true)
+                {
+                    BasketList.ShoppingItems.Add(item.DrinkName);
+                    BasketList.PriceOfItem.Add(item.DrinkPrice);
+                }
+            }
         }
+
+
+        //private void ButtonOrder_Click(object sender, RoutedEventArgs e)
+        //{
+
+        //}
     }
 }

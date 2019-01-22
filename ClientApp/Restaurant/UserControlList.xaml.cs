@@ -55,5 +55,16 @@ namespace Restaurant
             return drinks;
         }
 
+        private void ButtonAddToBasket_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in drinks)
+            {
+                if (item.IsCheked == true)
+                {
+                    BasketList.ShoppingItems.Add(item.DrinkName);
+                    BasketList.PriceOfItem.Add(item.DrinkPrice);
+                }
+            }
+        }
     }
 }
