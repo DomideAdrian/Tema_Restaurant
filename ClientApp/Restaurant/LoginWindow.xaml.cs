@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Restaurant;
 
 namespace Restaurant
 {
@@ -41,15 +42,41 @@ namespace Restaurant
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if (TextBoxUsername.Text == "1" && TextBoxPassword.Password.ToString() == "1")
+            WriteMessage loginRequest = new WriteMessage();
+            ReadMessage loginAck = new ReadMessage();
+
+            List<string> credentials = new List<string>
             {
-                MainWindow app = new MainWindow();
-                app.Show();
-                Close();
+                TextBoxUsername.Text,
+                TextBoxPassword.Password.ToString()
+            };
+            string requestString = loginRequest.WeldPhrase("LOGIN", credentials); //creez mesajul pe care il trimit la server
+
+            string ackString = loginAck.GetPhrase(requestString); //primesc mesaj de la server
+            string accept = loginAck.SplitPhrase(ackString, 0);
+            if (accept == "LOGIN_ERROR") //verific daca ma pot loga sau nu
+            {
+                MessageBox.Show("Server not working");
             }
             else
             {
-                MessageBox.Show("Incorrect username or password");
+                string username = loginAck.SplitPhrase(ackString, 1);
+                string password = loginAck.SplitPhrase(ackString, 2);
+
+                if (username == "1" && password == "1") //user si parola harcodate, trebuie modificat
+                {
+                    MainWindow app = new MainWindow
+                    {
+                        UsernameProperty = username
+                    };
+                    app.Show();
+                    
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("Wrong username or password");
+                }
             }
         }
 
@@ -57,5 +84,6 @@ namespace Restaurant
         {
             Application.Current.Shutdown();
         }
+
     }
 }

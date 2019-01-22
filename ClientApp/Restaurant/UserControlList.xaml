@@ -6,10 +6,10 @@
              xmlns:local="clr-namespace:Restaurant"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-              Height="auto" Width="auto">
+              Height="300" Width="auto">
     <Grid>
         <materialDesign:TransitioningContent x:Name="TrainsitionigContentSlide" OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft, Duration=0:0:0.8}">
-            <Grid>
+            <!--<Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -66,7 +66,24 @@
                         </StackPanel>
                     </StackPanel>
                 </Grid>
-            </Grid>
+            </Grid>-->
+
+            <ListBox ScrollViewer.CanContentScroll="False" Name="Drinks" ItemsSource="{Binding}" Width="600">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <TextBlock Text="{Binding DrinkName}" FontSize="22" Foreground="#FFC00000"/>
+                            <Image Source="{Binding ImageSource}" Width="200" Height="250" Stretch="UniformToFill"/>
+                            <TextBlock Text="{Binding DrinkDescription}" FontSize="8" Margin="5"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding DrinkPrice}" VerticalAlignment="Center" Margin="10" FontSize="20"/>
+                                <Button Width="100" Content="Order" Margin="10"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </materialDesign:TransitioningContent>
     </Grid>
 </UserControl>

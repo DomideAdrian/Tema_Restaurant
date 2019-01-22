@@ -43,6 +43,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -61,12 +63,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Basket.cs" />
+    <Compile Include="Connection.cs" />
+    <Compile Include="Drink.xaml.cs">
+      <DependentUpon>Drink.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DrinkList.cs" />
+    <Compile Include="ObservableDrink.cs" />
+    <Compile Include="ObservalbeCollection.cs" />
+    <Compile Include="ReadMessage.cs" />
+    <Compile Include="UserControlAccount.xaml.cs">
+      <DependentUpon>UserControlAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlBasket.xaml.cs">
+      <DependentUpon>UserControlBasket.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlDrinks.xaml.cs">
+      <DependentUpon>UserControlDrinks.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControlHome.xaml.cs">
       <DependentUpon>UserControlHome.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControlList.xaml.cs">
       <DependentUpon>UserControlList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WriteMessage.cs" />
+    <Page Include="Drink.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -86,6 +111,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControlAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControlBasket.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControlDrinks.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControlHome.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -124,6 +161,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\580b57fcd9996e24bc43c1e0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Cola.png" />
+    <Resource Include="Assets\JD.png" />
+    <Resource Include="Assets\Tea.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Pizza1.png" />
+    <Resource Include="Assets\Pizza2.png" />
+    <Resource Include="Assets\Pizza3.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

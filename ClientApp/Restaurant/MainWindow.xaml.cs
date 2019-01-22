@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,11 +24,16 @@ namespace Restaurant
         public MainWindow()
         {
             InitializeComponent();
+            //drinks = new ObservableCollection<ObservableDrink>();
+           // DataContext = this.GetDrink();
+            this.DataContext = this;
         }
 
         private void ButtonLogout_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            LoginWindow app = new LoginWindow();
+            app.Show();
+            Close();
         }
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -50,6 +56,10 @@ namespace Restaurant
                     GridPrincipal.Children.Clear();
                     GridPrincipal.Children.Add(new UserControlList());
                     break;
+                case 2:
+                    GridPrincipal.Children.Clear();
+                    GridPrincipal.Children.Add(new UserControlDrinks());
+                    break;
                 default:
                     break;
             }
@@ -60,5 +70,39 @@ namespace Restaurant
             TransitioningContentSlide.OnApplyTemplate();
             GridCursor.Margin = new Thickness(0, (100 + (60 * index)), 0, 0);
         }
+
+        public string UsernameProperty
+        {
+            get; set;
+        }
+       /* public int Collumn
+        {
+            get; set;
+        }
+        public int Row
+        {
+            get; set;
+        }*/
+        private void ButtonAccount_Click(object sender, RoutedEventArgs e)
+        {
+            GridPrincipal.Children.Clear();
+            GridPrincipal.Children.Add(new UserControlAccount());
+        }
+
+        private void ButtonBasket_Click(object sender, RoutedEventArgs e)
+        {
+            GridPrincipal.Children.Clear();
+            GridPrincipal.Children.Add(new UserControlBasket());
+        }
+
+        //public ObservableCollection<ObservableDrink> drinks
+        //{
+        //    get;
+        //    set;
+        //}
+
+
+
+
     }
 }

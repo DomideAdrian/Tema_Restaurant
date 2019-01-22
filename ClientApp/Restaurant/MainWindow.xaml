@@ -17,7 +17,10 @@
 
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0">
-                    <Button Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="Gray">
+                    <Button x:Name="ButtonBasket" Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="Gray" Click="ButtonBasket_Click">
+                        <materialDesign:PackIcon Kind="Basket"/>
+                    </Button>
+                    <Button x:Name="ButtonAccount" Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="Gray" Click="ButtonAccount_Click">
                         <materialDesign:PackIcon Kind="Account"/>
                     </Button>
                     <Button Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="Gray">
@@ -32,9 +35,20 @@
 
         <Grid Margin="250 55 0 0">
             <Grid x:Name="GridPrincipal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <ListBox ItemsSource="{Binding drinks}" Height="200" Width="300">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <TextBlock Text="{Binding drinkName}" FontSize="22" Foreground="#FFC00000"/>
+
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
 
         <Grid Width="250" HorizontalAlignment="Left" Background="#FF2F2F2F">
+            <Label Width="250" Height="50" VerticalAlignment="Top" HorizontalAlignment="Center" Content="{Binding UsernameProperty}" FontSize="30" Foreground="White"/>
             <materialDesign:TransitioningContent x:Name="TransitioningContentSlide" OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft, Duration=0:0:0.2}">
                 <Grid x:Name="GridCursor" Margin="0 100 0 0" Background="#FF0069C0" Width="10" HorizontalAlignment="Left" Height="60" VerticalAlignment="Top">
 

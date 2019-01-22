@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,39 @@ namespace Restaurant
     /// </summary>
     public partial class UserControlList : UserControl
     {
+        ObservableCollection<ObservableDrink> drinks = new ObservableCollection<ObservableDrink>();
         public UserControlList()
         {
             InitializeComponent();
+
+            DataContext = GetDrink();
         }
+        public ObservableCollection<ObservableDrink> GetDrink()
+        {
+            drinks.Add(new ObservableDrink()
+            {
+                DrinkName = "Pizza1",
+                ImageSource = "Assets/Pizza1.png",
+                DrinkDescription = "Nice Pizza",
+                DrinkPrice = "22$"
+            });
+            drinks.Add(new ObservableDrink()
+            {
+                DrinkName = "Pizza2",
+                ImageSource = "Assets/Pizza2.png",
+                DrinkDescription = "Good Pizza",
+                DrinkPrice = "33$"
+            });
+            drinks.Add(new ObservableDrink()
+            {
+                DrinkName = "Pizza3",
+                ImageSource = "Assets/Pizza3.png",
+                DrinkDescription = "Expensive Pizza",
+                DrinkPrice = "40$"
+            });
+
+            return drinks;
+        }
+
     }
 }
