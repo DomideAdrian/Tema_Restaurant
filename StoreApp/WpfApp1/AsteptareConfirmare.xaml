@@ -1,0 +1,79 @@
+﻿<Page x:Class="WpfApp1.AsteptareConfirmare"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1000"
+      Title="AsteptareConfirmare">
+
+    <Grid>
+        <DataGrid x:Name="DataGridPage1" HorizontalAlignment="Left" VerticalAlignment="Top"
+                 RowDetailsVisibilityMode="VisibleWhenSelected"
+                             IsReadOnly="True"  >
+            <!--font color and style of column headings-->
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="orange"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="BorderThickness" Value="0,0,1,2"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+
+                </Style>
+            </DataGrid.Resources>
+            <!--collum header text & binding-->
+            <DataGrid.Columns >
+                <DataGridTextColumn Header="Nr Crt" Width="40" Binding="{Binding NrCrt}" />
+                <DataGridTextColumn Header="Nume Client"   Binding="{Binding NumeClient}" Width="100">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <EventSetter Event="MouseLeftButtonDown" Handler="DataGridCell_MouseLeftButtonDown"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Adresa" Width="80" Binding="{Binding Adresa}"/>
+                <DataGridTextColumn Header="Comanda" Width="*" Binding="{Binding Comanda}"/>
+                <DataGridTextColumn Header="Stadiu" Width="150" Binding="{Binding StagiuComanda}"/>
+
+            </DataGrid.Columns>
+            
+            <!--close row details-->
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridRow_PreviewMouseLeftButtonDown"/>
+                </Style>
+            </DataGrid.ItemContainerStyle>
+            
+            
+            <!--show row details precum intreaga comanda-->
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="0" Background="LightCyan" Padding="10">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="12" Text="Nume Client: " VerticalAlignment="Center" />
+                                <TextBlock FontSize="16" Foreground="MidnightBlue" Text="{Binding NumeClient}" VerticalAlignment="Top" TextWrapping="Wrap" Width="500"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="12" Text="Adresa: " VerticalAlignment="Top" />
+                                <TextBlock FontSize="16" Foreground="MidnightBlue" Text="{Binding Adresa}" VerticalAlignment="Top" TextWrapping="Wrap" Width="500"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="12" Text=" Nr Telefon: " VerticalAlignment="Top" />
+                                <TextBlock FontSize="16" Foreground="MidnightBlue" Text="{Binding NrTelefon}" VerticalAlignment="Top" TextWrapping="Wrap" Width="100"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="12" Text=" Comanda: " VerticalAlignment="Top" />
+                                <TextBlock FontSize="16" Foreground="MidnightBlue" Text="{Binding Comanda}" VerticalAlignment="Top" TextWrapping="Wrap" Width="500"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+
+
+        </DataGrid>
+    </Grid>
+</Page>

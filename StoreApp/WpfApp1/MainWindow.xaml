@@ -1,0 +1,144 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d" Height="650" Width="1000" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Foreground="Wheat">
+    <Window.Resources>
+        <Storyboard x:Key="MenuOpen" >
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="60"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="200" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="MenuClose" >
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="60"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        
+        
+        <!--animatie de glisare tabele cand se deschide meniul-->
+        <Storyboard x:Key="GridPagesRestoreDown">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridPages">
+                <EasingDoubleKeyFrame KeyTime="0" Value="940"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="800"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <!--animatie de marire a tabelei cand se inchide meniul-->
+        <Storyboard x:Key="GridPagesMaximize">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridPages">
+                <EasingDoubleKeyFrame KeyTime="0" Value="800"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="940"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+
+    <Window.Triggers>
+        
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource MenuOpen}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource MenuClose}"/>
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource GridPagesRestoreDown}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource GridPagesMaximize}"/>
+        </EventTrigger>
+        
+    </Window.Triggers>
+    
+    <Grid Background="LightGray">
+        <Grid Height="60" VerticalAlignment="Top" Background="#FFE89626">
+            <TextBlock Text="Aplicatie Restaurant" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"  />
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="Username" VerticalAlignment="Center" FontSize="18" />
+                <materialDesign:PopupBox Margin="10" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
+                    <StackPanel Width="150">
+                        <Button Content="Account" />
+                        <Button Content="Settings" />
+                        <Separator />
+                        <Button x:Name="ButtonPopUpLogout"  Content="Logout" Click="ButtonPopUpLogout_Click" />
+                    </StackPanel>
+                </materialDesign:PopupBox>
+                
+            </StackPanel>
+            
+        </Grid>
+        <!--grid meniu -->
+        <Grid x:Name="GridMenu" Width="60" HorizontalAlignment="Left" Background="#FF97631D" >
+            <StackPanel>
+                <Grid Height="150" Background="White">
+                    <Button x:Name="ButtonCloseMenu" Width="60" Height="60" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="Collapsed" Click="ButtonCloseMenu_Click">
+                        <materialDesign:PackIcon Foreground="#FF97631D" Kind="ArrowLeft" Width="25" Height="25" />
+                    </Button>
+                    <Button x:Name="ButtonOpenMenu" Width="60" Height="60" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Right" Click="ButtonOpenMenu_Click">
+                        <materialDesign:PackIcon Foreground="#FF97631D" Kind="Menu" Width="25" Height="25" />
+                    </Button>
+                </Grid>
+                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="Beige">
+                    
+                                    
+                    <ListViewItem Height="60" MouseDoubleClick="ListViewItem_MouseDoubleClick_OpenAsteptareConformareComanda">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Hourglass" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
+                            <TextBlock Text="In Asteptare" VerticalAlignment="Center" Margin="20 10" />
+                        </StackPanel>
+                    </ListViewItem>
+                    
+                    <ListViewItem Height="60" MouseDoubleClick="ListViewItem_MouseDoubleClick_OpenPreparareComanda">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Food" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
+                            <TextBlock Text="In Preparare" VerticalAlignment="Center" Margin="20 10"/>
+                        </StackPanel>
+                    </ListViewItem>
+
+                    <ListViewItem Height="60" MouseDoubleClick="ListViewItem_MouseDoubleClick_OpenLivrareComanda">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Car" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
+                            <TextBlock Text="In Livrare" VerticalAlignment="Center" Margin="20 10"/>
+                        </StackPanel>
+                    </ListViewItem>
+
+                    <ListViewItem Height="60" MouseDoubleClick="ListViewItem_MouseDoubleClick_OpenIstoric">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Historic" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
+                            <TextBlock Text="Istoric" VerticalAlignment="Center" Margin="20 10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    
+                    <ListViewItem Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Book" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
+                            <TextBlock Text="Adaugare Meniu" VerticalAlignment="Center" Margin="20 10"/>
+                        </StackPanel>
+                    </ListViewItem>
+
+                    <ListViewItem Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Discount" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
+                            <TextBlock Text="Voucer" VerticalAlignment="Center" Margin="20 10"/>
+                        </StackPanel>
+                    </ListViewItem>
+
+                </ListView>
+            </StackPanel>
+            
+        </Grid>
+        
+        <!--grid pentru tabele /add meniu/voucere-->
+        
+        <Grid x:Name="GridPages" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="940" Height="590">
+            <Frame x:Name="FrameMain" Margin="0 0 0 0" NavigationUIVisibility="Hidden"/>
+        </Grid>
+    </Grid>
+        
+</Window>
