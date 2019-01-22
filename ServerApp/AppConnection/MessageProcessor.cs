@@ -14,8 +14,9 @@ namespace ServerApp.AppConnection
         {
             List<string> words = new List<string>();
             words = SplitMessage(recMessage);
-            List<string> result = InterpretMessage(words);
-            return string.Empty;
+            List<string> interpretedList = InterpretMessage(words);
+            string message = ConstructMessage(interpretedList);
+            return message;
         }
 
         public static List<string> SplitMessage(string message)
@@ -60,16 +61,17 @@ namespace ServerApp.AppConnection
                 case "REQUEST_CATEGORY":
                     return DataManager.GetCategories();
                 case "REQUEST_CATEGORY_PRODUCTS":
-                    return DataManager.CategoryName(list[1]);
+                    return DataManager.CategoryProducts(list[1]);
                 case "REQUEST_ORDERS":
                     return DataManager.GetOrders();
                 case "CHANGE_STATUS":
                     return DataManager.ChangeStatus(new Guid(list[1]), list[2]);
                 case "REQUEST_ORDER_DETAILS":
                     return DataManager.GetOrderDetails(new Guid(list[1]));
+                default:
+                    return new List<string>() { "UNRECOGNIZED MESSAGE"};
 
             }
-            return new List<string>();
         }
 
         #endregion
