@@ -62,6 +62,45 @@ namespace Restaurant
         }
         public ObservableCollection<ObservableDrink> GetDrink()
         {
+
+            WriteMessage loginRequest = new WriteMessage();
+            ReadMessage loginAck = new ReadMessage();
+
+            List<string> categoryName = new List<string>
+            {
+                "Drinks"
+            };
+
+            string requestString = loginRequest.WeldPhrase("REQUEST_CATEGORY_PRODUCTS", categoryName); //cer categoria mancare
+
+            Connection toServerConnection = new Connection();
+            string response = toServerConnection.Send(requestString);
+
+            string ackString = loginAck.GetPhrase(response); //primesc mesaj de la server
+            string accept = loginAck.SplitPhrase(response, 0);
+
+            if (accept != "REQUEST_CATEGORY_PRODUCTS")
+            {
+                MessageBox.Show("Error from server!");
+            }
+            else
+            {
+                for (int i = 1; i < ackString.Count(); i++)
+                {
+                    string nameOfItem = loginAck.SplitPhrase(response, i);
+                    string descriptionOfItem = loginAck.SplitPhrase(response, i + 1);
+                    string priceOfItem = loginAck.SplitPhrase(response, i + 2);
+                    drinks.Add(new ObservableDrink()
+                    {
+                        DrinkName = nameOfItem,
+                        ImageSource = "Assets/Pizza1.png",
+                        DrinkDescription = descriptionOfItem,
+                        DrinkPrice = priceOfItem
+                    });
+                }
+            }
+
+            /*
             drinks.Add(new ObservableDrink()
             {
                 DrinkName = "Cola",
@@ -87,7 +126,7 @@ namespace Restaurant
                 DrinkDescription = "TEA",
                 DrinkPrice = "4$",
                 IsCheked = false
-            });
+            });*/
 
             return drinks;
         }

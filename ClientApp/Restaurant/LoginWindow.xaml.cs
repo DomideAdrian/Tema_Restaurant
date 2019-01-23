@@ -20,6 +20,7 @@ namespace Restaurant
     /// </summary>
     public partial class LoginWindow : Window
     {
+        static List<string> userDetails;
         public LoginWindow()
         {
             InitializeComponent();
@@ -52,33 +53,39 @@ namespace Restaurant
             };
             string requestString = loginRequest.WeldPhrase("LOGIN", credentials); //creez mesajul pe care il trimit la server
 
+            Connection toServerConnection = new Connection();
+            string response = toServerConnection.Send(requestString);
+
+            string ackString = loginAck.GetPhrase(response); //primesc mesaj de la server
+            string accept = loginAck.SplitPhrase(response, 0);
 
 
-            string ackString = loginAck.GetPhrase(requestString); //primesc mesaj de la server
-            string accept = loginAck.SplitPhrase(ackString, 0);
             if (accept == "LOGIN_ERROR") //verific daca ma pot loga sau nu
             {
-                MessageBox.Show("Server not working");
+                MessageBox.Show("Wrong username or password");
             }
             else
             {
-                string username = loginAck.SplitPhrase(ackString, 1);
-                string password = loginAck.SplitPhrase(ackString, 2);
+                //string username = loginAck.SplitPhrase(ackString, 1);
+                //string password = loginAck.SplitPhrase(ackString, 2);
+                userDetails.Add(loginAck.SplitPhrase(ackString, 1)); //userID
+                userDetails.Add(loginAck.SplitPhrase(ackString, 2)); //adresa
+                userDetails.Add(loginAck.SplitPhrase(ackString, 3)); //voucher
 
-                if (username == "1" && password == "1") //user si parola harcodate, trebuie modificat
+                // if ()(username == "1" && password == "1") //user si parola harcodate, trebuie modificat
+                //{
+                MainWindow app = new MainWindow
                 {
-                    MainWindow app = new MainWindow
-                    {
-                        UsernameProperty = username
-                    };
-                    app.Show();
+                    UsernameProperty = TextBoxUsername.Text
+                };
+                app.Show();
 
-                    Close();
-                }
-                else
-                {
-                    MessageBox.Show("Wrong username or password");
-                }
+                Close();
+               // }
+                //else
+                //{
+                //    MessageBox.Show("Wrong username or password");
+                //}
             }
         }
 
