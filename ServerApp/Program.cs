@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerApp.AppConnection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,8 @@ namespace ServerApp
     {
         static void Main(string[] args)
         {
-            //StartServer();
+            ConnectionManager Server = new ConnectionManager();
+
             //Conexion
         }
     }
