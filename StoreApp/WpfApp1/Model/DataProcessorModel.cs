@@ -65,12 +65,7 @@ namespace WpfApp1
 
 		private int _nrCrt;
 
-		public int NrCrt 
-		{
-			get { return _nrCrt; }
-			set { _nrCrt = value; }
-		}
-
+		
 
 
 

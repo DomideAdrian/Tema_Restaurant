@@ -24,13 +24,7 @@ namespace WpfApp1
 		public PreparareComanda(ObservableCollection<DataProcessorModel> pvaluesDataGrid)
 		{
 			InitializeComponent();
-
-
-
-
-
-
-
+			
 			if (pvaluesDataGrid != null)
 			{
 
@@ -43,6 +37,7 @@ namespace WpfApp1
 					}
 				}
 			}
+			
 		}
 
 		private void DataGridCell_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

@@ -114,20 +114,20 @@
                             <TextBlock Text="Istoric" VerticalAlignment="Center" Margin="20 10"/>
                         </StackPanel>
                     </ListViewItem>
-                    
-                    <ListViewItem Height="60">
+
+                    <ListViewItem Height="60" MouseDoubleClick="ListViewItem_MouseDoubleClick_openAddMeniu">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Book" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
                             <TextBlock Text="Adaugare Meniu" VerticalAlignment="Center" Margin="20 10"/>
                         </StackPanel>
                     </ListViewItem>
 
-                    <ListViewItem Height="60">
+                    <!--<ListViewItem Height="60">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Discount" Width="25" Height="25" Margin="10" VerticalAlignment="Center"/>
                             <TextBlock Text="Voucer" VerticalAlignment="Center" Margin="20 10"/>
                         </StackPanel>
-                    </ListViewItem>
+                    </ListViewItem>-->
 
                 </ListView>
             </StackPanel>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,24 +14,34 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfApp1.Model;
 using WpfApp1.Personal;
 using WpfApp1.ViewModel;
 
 namespace WpfApp1
 {
+
+	
+
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
 		ObservableCollection<DataProcessorModel> obsDataWainting= new ObservableCollection<DataProcessorModel>();
-		//ObservableCollection<DataProcessorModel> obsDataPreparing=null;
-		//ObservableCollection<DataProcessorModel> obsDataDelivering=null;
-		//ObservableCollection<DataProcessorModel> obsDataDelivered=null;
+
 
 		DataProcessorViewModel pProcessData = new DataProcessorViewModel();
-		string received_string = "Orders;1555;mitica;076;bd Viilor;10;uiteceva;alteceva;...;144;ion;075;bd georgescu;4;piftele;ciorba;...";
-		 Angajati bucatari = new Angajati();
+		string received_string = "ORDERS;1555;mitica;076;bd Viilor;10;uiteceva;alteceva;...;144;ion;075;bd georgescu;4;piftele;ciorba;...";
+		Angajati bucatari = new Angajati();
+
+		List<string> received_flag;
+
+		public Connection connect = new Connection();
+
+
+
 
 		public MainWindow()
         {
@@ -73,22 +84,30 @@ namespace WpfApp1
 			
 		}
 
+
+
+
+		/// <summary>
+		/// Pagini
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ListViewItem_MouseDoubleClick_OpenAsteptareConformareComanda(object sender, MouseButtonEventArgs e)
 		{
+
 			if (received_string != null)
 			{
-				List<string> received_flag = pProcessData.mDetectFlag(received_string);
-				switch (received_flag[0])
-				{
-					case "Orders":
-						received_flag.RemoveAt(0);
-						
-						obsDataWainting = pProcessData.mSplit(received_flag, obsDataWainting);
-						received_string = null;
-						break;
-
-				}
+				received_flag = pProcessData.mDetectFlag(received_string);
 			}
+				if (received_flag[0] == "ORDERS")
+				{
+					received_flag.RemoveAt(0);
+
+					obsDataWainting = pProcessData.mSplit(received_flag, obsDataWainting);
+					received_string = null;
+				}
+			
+
 
 			foreach (var value2 in obsDataWainting)
 			{
@@ -111,9 +130,34 @@ namespace WpfApp1
 			
 		}
 
+		/// <summary>
+		/// Pagina in care sunt afisate comenzile ce sunt in stagiu de preparare sau sunt pregatite sa fie livrate
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ListViewItem_MouseDoubleClick_OpenPreparareComanda(object sender, MouseButtonEventArgs e)
 		{
-			if(obsDataWainting!=null)
+
+			
+			if (received_string != null )
+			{
+				received_flag = pProcessData.mDetectFlag(received_string);
+				
+			}
+			if (received_flag[0] == "CURIERS")
+			{
+			
+				received_flag.RemoveAt(0);
+				MyUtils.listaCurieri=pProcessData.mSplitCurieri(received_flag);
+				received_string = null;
+				
+			}
+
+
+			
+
+
+			if (obsDataWainting!=null)
 			{
 
 				foreach (var value2 in obsDataWainting)
@@ -126,39 +170,52 @@ namespace WpfApp1
 					{
 						if (value2.StagiuComanda == "Preparing")
 						{
+
 							value2.StagiuComanda = "Confirm To Be Delivered";
 							bucatari.Bucatar++;
 						}
 					}
 				}
+
+
+
+
 			}
-
-			//MessageBox.Show(bucatari.Bucatar.ToString());
-
 			
-			FrameMain.Content = new PreparareComanda(obsDataWainting);
-
+				FrameMain.Content = new PreparareComanda(obsDataWainting);
+			
 		}
 
+
+		/// <summary>
+		/// page facuta pentru a afisa toate comenzile ce se livreaza curent
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		/// 
 		private void ListViewItem_MouseDoubleClick_OpenLivrareComanda(object sender, MouseButtonEventArgs e)
 		{
 			if (obsDataWainting != null)
 			{
-				received_string = "Orders;1555;fasfasdsadasdasad;076;bd Viilor;10;uiteceva;alteceva;...;14;ionel;075;bd georgescu;4;piftefdsfsle;ciorfsdfaba;...";
+				received_string = "CURIERS;mitica;111;ionel;555";
 				foreach (var value2 in obsDataWainting)
 				{
-					if (bucatari.Bucatar != 0)
-					{
-						break;
-					}
-					else
-					{ 
-						if (value2.StagiuComanda == "Waiting To Be Delivered")
+				
+						if (value2.StagiuComanda == "Confirm To Be Delivered" && MyUtils.listaCurieri!=null)
 						{
-							value2.StagiuComanda = "Delivering";
+							foreach (var value in MyUtils.listaCurieri)
+							{
+								if (value.StagiuComandaCurier == "Waiting")
+								{
+									value2.StagiuComanda = "Delivering";
+									value.StagiuComandaCurier = "Delivering";
+
+								}
+							}
+							
 						
 						}
-					}
+					
 				}
 			}
 
@@ -166,9 +223,31 @@ namespace WpfApp1
 			FrameMain.Content = new InCursDeLivrareComanda(obsDataWainting);
 		}
 
+		/// <summary>
+		/// afiseaza toate comenzile ce au fost livrate
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ListViewItem_MouseDoubleClick_OpenIstoric(object sender, MouseButtonEventArgs e)
 		{
 			FrameMain.Content = new IstoricComenzi(obsDataWainting);
+		}
+
+
+		/// <summary>
+		/// Page Adaugare Meniu 
+		/// se realizaeaza construirea sirului de trimitere a datelor pentru a inserarea unui unui produs
+		/// cu datele aferente acestuia
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ListViewItem_MouseDoubleClick_openAddMeniu(object sender, MouseButtonEventArgs e)
+		{
+
+			FrameMain.Content = new AddMeniuPage();
+			
+			
+
 		}
 	}
 }

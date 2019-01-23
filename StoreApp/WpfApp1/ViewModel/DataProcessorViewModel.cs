@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using WpfApp1.Model;
 
 namespace WpfApp1.ViewModel
 {
@@ -20,12 +21,51 @@ namespace WpfApp1.ViewModel
 		}
 
 		
+		public  List<Curieri> mSplitCurieri(List<string> pEnterString)
+		{
+			List<Curieri> list = new List<Curieri>();
+			int _contor = 0;
+			string _Nume="";
+			foreach(var value in pEnterString)
+			{
+
+				if (_contor == 1)
+				{
+				
+					list.Add(new Curieri
+					{
+
+						NumeCurier = _Nume,
+						NumarTelefon = value,
+						StagiuComandaCurier="Waiting"
+
+					});
+					
+					_contor = 0;
+				}
+				else
+				{
+
+					_contor = 1;
+					_Nume = value;
+				}
+
+				
+			}
+
+
+
+			return list;
+		}
+
+
+
 
 		//mesajul este construit dupa un protocol
 		//se insereaza mesajul primit intr-un observableCollection de tip DataProcessorModel
 		public ObservableCollection<DataProcessorModel> mSplit(List<string> pEnterString, ObservableCollection<DataProcessorModel> date)
 		{
-			//ObservableCollection<DataProcessorModel> date = new ObservableCollection<DataProcessorModel>();
+		
 			List<string> listenter = new List<string>();
 
 			List<DataProcessorModel> listdataPrModel = new List<DataProcessorModel>();
@@ -51,7 +91,7 @@ namespace WpfApp1.ViewModel
 						StagiuComanda = "Waiting",
 						PreparetionTime = listenter[contor_blocks + 4],
 						Comanda = listenter[contor_blocks + 5],
-						NrCrt = contor_blocks / 6 + 1
+						
 					});
 
 					contor_blocks += 6;

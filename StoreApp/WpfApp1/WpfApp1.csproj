@@ -61,8 +61,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddMeniuPage.xaml.cs">
+      <DependentUpon>AddMeniuPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Curieri.cs" />
+    <Compile Include="MyUtils.cs" />
     <Compile Include="Personal\Angajati.cs" />
     <Compile Include="ViewModel\DataProcessorViewModel.cs" />
+    <Page Include="AddMeniuPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AsteptareConfirmare.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
