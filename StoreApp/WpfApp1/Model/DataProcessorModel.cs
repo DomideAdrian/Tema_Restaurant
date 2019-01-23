@@ -12,12 +12,12 @@ namespace WpfApp1
 
 		private string _NumeClient;
 
-		private string _id_client;
+		private string _id_comanda;
 
-		public string Id_client 
+		public string Id_comanda 
 		{
-			get { return _id_client; }
-			set { _id_client = value; }
+			get { return _id_comanda; }
+			set { _id_comanda = value; }
 		}
 		private string _preparetionTime;
 
@@ -62,28 +62,5 @@ namespace WpfApp1
 			get { return _NrTelefon; }
 			set { _NrTelefon = value; }
 		}
-
-		private int _nrCrt;
-
-		
-
-
-
-
-		//private ObservableCollection<string> _enterString;
-
-
-
-		//public ObservableCollection<string> sir
-		//{
-		//	get { return _enterString; }
-		//	set
-		//	{
-		//		_enterString = value;
-		//	}
-		//}
-
-
-
 	}
 }

@@ -37,11 +37,11 @@ namespace WpfApp1
 		Angajati bucatari = new Angajati();
 
 		List<string> received_flag;
-
-		public Connection connect = new Connection();
-
+	
 
 
+
+	//	public Connection connect = new Connection();
 
 		public MainWindow()
         {
@@ -94,7 +94,9 @@ namespace WpfApp1
 		/// <param name="e"></param>
 		private void ListViewItem_MouseDoubleClick_OpenAsteptareConformareComanda(object sender, MouseButtonEventArgs e)
 		{
-
+			
+			//received_string = connect.Send(MyUtils.Request_Order);
+			
 			if (received_string != null)
 			{
 				received_flag = pProcessData.mDetectFlag(received_string);
@@ -107,8 +109,6 @@ namespace WpfApp1
 					received_string = null;
 				}
 			
-
-
 			foreach (var value2 in obsDataWainting)
 			{
 				if (bucatari.Bucatar == 0)
@@ -138,7 +138,9 @@ namespace WpfApp1
 		private void ListViewItem_MouseDoubleClick_OpenPreparareComanda(object sender, MouseButtonEventArgs e)
 		{
 
-			
+			//received_string = connect.Send(MyUtils.Insert_order);
+
+
 			if (received_string != null )
 			{
 				received_flag = pProcessData.mDetectFlag(received_string);
@@ -159,27 +161,17 @@ namespace WpfApp1
 
 			if (obsDataWainting!=null)
 			{
-
 				foreach (var value2 in obsDataWainting)
 				{
-					if (bucatari.Bucatar != 0)
-					{
-						break;
-					}
-					else
-					{
+				
 						if (value2.StagiuComanda == "Preparing")
 						{
 
 							value2.StagiuComanda = "Confirm To Be Delivered";
 							bucatari.Bucatar++;
 						}
-					}
 				}
-
-
-
-
+				
 			}
 			
 				FrameMain.Content = new PreparareComanda(obsDataWainting);
@@ -192,12 +184,12 @@ namespace WpfApp1
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		/// 
+
 		private void ListViewItem_MouseDoubleClick_OpenLivrareComanda(object sender, MouseButtonEventArgs e)
 		{
 			if (obsDataWainting != null)
 			{
-				received_string = "CURIERS;mitica;111;ionel;555";
+			
 				foreach (var value2 in obsDataWainting)
 				{
 				
@@ -207,9 +199,10 @@ namespace WpfApp1
 							{
 								if (value.StagiuComandaCurier == "Waiting")
 								{
+
 									value2.StagiuComanda = "Delivering";
 									value.StagiuComandaCurier = "Delivering";
-
+								    value.Id_comanda = value2.Id_comanda;
 								}
 							}
 							
@@ -230,6 +223,25 @@ namespace WpfApp1
 		/// <param name="e"></param>
 		private void ListViewItem_MouseDoubleClick_OpenIstoric(object sender, MouseButtonEventArgs e)
 		{
+			if (obsDataWainting != null)
+			{
+				foreach (var value2 in obsDataWainting)
+				{
+					
+						if (value2.StagiuComanda == "Delivering")
+						{
+							value2.StagiuComanda = "Delivered";
+							
+						   foreach(var value in MyUtils.listaCurieri)
+						{
+							if(value.Id_comanda==value2.Id_comanda && value.StagiuComandaCurier=="Delivering")
+							{
+								value.StagiuComandaCurier = "Waiting";
+							}
+						}
+						}
+				}
+			}
 			FrameMain.Content = new IstoricComenzi(obsDataWainting);
 		}
 
@@ -245,7 +257,9 @@ namespace WpfApp1
 		{
 
 			FrameMain.Content = new AddMeniuPage();
-			
+		
+			//MyUtils.Receive_message = connect.Send(MyUtils.Insert_order);
+
 			
 
 		}

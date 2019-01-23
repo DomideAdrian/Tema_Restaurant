@@ -31,14 +31,14 @@ namespace WpfApp1.ViewModel
 
 				if (_contor == 1)
 				{
-				
+
 					list.Add(new Curieri
 					{
 
 						NumeCurier = _Nume,
 						NumarTelefon = value,
-						StagiuComandaCurier="Waiting"
-
+						StagiuComandaCurier = "Waiting",
+						Id_comanda = "000000"
 					});
 					
 					_contor = 0;
@@ -84,7 +84,7 @@ namespace WpfApp1.ViewModel
 
 					listdataPrModel.Add(new DataProcessorModel
 					{
-						Id_client = listenter[contor_blocks],
+						Id_comanda = listenter[contor_blocks],
 						NumeClient = listenter[contor_blocks + 1],
 						NrTelefon = listenter[contor_blocks + 2],
 						Adresa = listenter[contor_blocks + 3],

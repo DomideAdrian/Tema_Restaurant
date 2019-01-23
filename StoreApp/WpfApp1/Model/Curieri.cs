@@ -30,6 +30,13 @@ namespace WpfApp1.Model
 			get { return _StagiuComandaCurier; }
 			set { _StagiuComandaCurier = value; }
 		}
+		private string _id_comanda;
+
+		public string Id_comanda
+		{
+			get { return _id_comanda; }
+			set { _id_comanda = value; }
+		}
 
 
 	}
