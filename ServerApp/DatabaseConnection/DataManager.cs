@@ -18,21 +18,31 @@ namespace ServerApp.DatabaseConnection
         {
             using (var context = new RestaurantEntities())
             {
-                //Check if a user exits
-                ObjectParameter userId = new ObjectParameter("UserId", new Guid());
-                ObjectParameter phone = new ObjectParameter("Phone", string.Empty);
-                ObjectParameter voucher = new ObjectParameter("Voucher", 0 );
-                context.User_Login("Domide Adrian", "12345", userId, phone,voucher);
-
+                //Check if a user exist
+                var result = from u in context.Users
+                             where u.Username.Equals(username)
+                             where u.User_Password.Equals(password)
+                             select new
+                             {
+                                 u.Id_User,
+                                 u.Phone
+                             };
                 //Generate message
                 List<string> words = new List<string>();
-                if (new Guid(userId.Value.ToString()) != new Guid())
+                if (result.Count() != 0)
                 {
                     //Succesfully connected
                     words.Add("LOGIN_OK;");
-                    words.Add(userId.Value.ToString() + ';');
-                    words.Add(phone.Value.ToString() + ';');
-                    words.Add(voucher.Value.ToString() + ';');
+                    words.Add(result.First().Id_User.ToString() + ';');
+                    words.Add(result.First().Phone.ToString() + ';');
+                    var voucher = from r in result
+                                  join v in context.Vouchers
+                                  on r.Id_User equals v.Id_User
+                                  select v;
+                    if(voucher.Count() != 0)
+                        words.Add(voucher.First().Value.ToString() + ';');
+                    else
+                        words.Add("0;");
                 }
                 else
                     //ERROR
@@ -136,6 +146,11 @@ namespace ServerApp.DatabaseConnection
                                 u.Phone,
                                 u.User_Address
                             };
+                if(results.Count() == 0)
+                {
+                    words.Add("...;");
+                    return words;
+                }
                 //For each comand get each product details and add to list
                 foreach(var item in results)
                 {
@@ -172,17 +187,28 @@ namespace ServerApp.DatabaseConnection
             }
         }
 
-        public static List<string> ChangeStatus(Guid orderId, string status)
+        public static List<string> ChangeStatus(Guid orderId, string status, List<string> list)
         {
             using (var context = new RestaurantEntities())
             {
-                //Generate status 
+                //Generate status
+
                 var result = (from c in context.Order_Status
-                             where c.Order_Id.Equals(orderId)
-                             select c).First();
+                              where c.Order_Id.Equals(orderId)
+                              select c).First();
+
                 //If status change to In delivery will automaticaly generate bill
                 if (status.Equals("In delivery"))
+                {
                     GenerateBill(orderId);
+                    var courier = (from c in context.Couriers
+                                     where c.Name.Equals(list[3])
+                                     select c).First();
+                    var order = (from o in context.Orders
+                                 where o.Order_Id.Equals(orderId)
+                                 select o).First();
+                    order.Courier_Id = courier.Courier_Id;
+                }
                 result.Order_Status1 = status;
                 result.Last_Update = DateTime.Now;
                 context.SaveChanges();
@@ -234,6 +260,22 @@ namespace ServerApp.DatabaseConnection
                     }
                 }
                 Insert_Bill(orderId, total, DateTime.Now);
+            }
+        }
+
+        public static List<string>GetCouriers()
+        {
+            using (var context = new RestaurantEntities())
+            {
+                List<string> words = new List<string>() { "COURIERS;" };
+                var result =  from c in context.Couriers
+                              select c;
+                foreach(var item in result)
+                {
+                    words.Add(item.Name + ';');
+                    words.Add(item.Phone + ';');
+                }
+                return words;
             }
         }
         #endregion
@@ -301,10 +343,10 @@ namespace ServerApp.DatabaseConnection
         {
             using (var context = new RestaurantEntities())
             {
-                var categoryId = new Guid((from c in context.Product_Category
+                var result = (from c in context.Product_Category
                                            where c.Category_Name.Equals(catName)
-                                           select new { c.Category_Id }).First().ToString());
-                context.Insert_Product(Guid.NewGuid(), name, categoryId, price, time, description);
+                                           select new { c.Category_Id }).First();
+                context.Insert_Product(Guid.NewGuid(), name, new Guid(Convert.ToString(result.Category_Id)), price, time, description);
                 return new List<string>() { "INSERT_PRODUCT_OK;" };
             }
         }
@@ -315,7 +357,7 @@ namespace ServerApp.DatabaseConnection
             {
                 context.Insert_Review(Guid.NewGuid(), orderId, mark, details);
                 List<string> words = new List<string>()
-                { "INSERT_REVIEW_OK;" };
+                { "CREATE_REVIEW_OK;" };
                 return words;
             }
         }
@@ -338,7 +380,7 @@ namespace ServerApp.DatabaseConnection
                 //Create order id
                 Guid orderId = Guid.NewGuid();
                 //Insert order , new orderID, param userId, new guid
-                context.Insert_Order(orderId, new Guid(list[1]), new Guid());
+                context.Insert_Order(orderId, new Guid(list[1]), new Guid("B38EC0EA-4C70-4735-B258-AE566ABE0299"));
                 //Insert status for order
                 Insert_Order_Status(orderId, "Waiting", DateTime.Now);
                 //for each product add row in processing table
@@ -357,11 +399,12 @@ namespace ServerApp.DatabaseConnection
 
                 //Voucher
                 if (total > 100)
-                    Set_Voucher(orderId, 20);
+                    Set_Voucher(new Guid(list[1]), 20);
 
                 //verify if client exist in loyal custommers table
+                Guid userId = new Guid(list[1]);
                 var result = from l in context.Loyal_Customers
-                             where l.Id_User.Equals(new Guid(list[1]))
+                             where l.Id_User == userId
                              select l;
 
                 if (result.Count() == 0)
@@ -370,7 +413,24 @@ namespace ServerApp.DatabaseConnection
                 {
                     //Set Voucher if total comands > 1000 in last 30 days
                     result.First().Total += total;
-                    AcordVoucher(result,context,orderId);
+                    DateTime initial = result.First().Period.Value;
+                    if (result.First().Total >= 1000 && (DateTime.Now.Date - initial.Date).Days < 30)
+                    {
+                        Set_Voucher(orderId, 100);
+                        result.First().Period = DateTime.Now;
+                        result.First().Total = 0;
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        if (result.First().Total >= 1000)
+                        {
+                            Set_Voucher(orderId, 50);
+                            result.First().Period = DateTime.Now;
+                            result.First().Total = 0;
+                            context.SaveChanges();
+                        }
+                    }
 
                 }
 
@@ -379,29 +439,6 @@ namespace ServerApp.DatabaseConnection
                 return words;
             }
         }
-
-        private static void AcordVoucher(IQueryable<Loyal_Customers> result,RestaurantEntities context,Guid orderId)
-        {
-            DateTime initial = result.First().Period.Value;
-            if (result.First().Total >= 1000 && (DateTime.Now.Date - initial.Date).Days < 30)
-            {
-                Set_Voucher(orderId, 100);
-                result.First().Period = DateTime.Now;
-                result.First().Total = 0;
-                context.SaveChanges();
-            }
-            else
-            {
-                if (result.First().Total >= 1000)
-                {
-                    Set_Voucher(orderId, 50);
-                    result.First().Period = DateTime.Now;
-                    result.First().Total = 0;
-                    context.SaveChanges();
-                }
-            }
-        }
-
 
         #endregion
 

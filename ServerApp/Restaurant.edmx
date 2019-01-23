@@ -329,8 +329,8 @@
         <Function Name="User_Login" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustomerName" Type="nvarchar" Mode="In" />
           <Parameter Name="Password" Type="nvarchar" Mode="In" />
-          <Parameter Name="IdUser" Type="uniqueidentifier" Mode="InOut" />
-          <Parameter Name="Telefon" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="UserId" Type="uniqueidentifier" Mode="InOut" />
+          <Parameter Name="Phone" Type="nvarchar" Mode="InOut" />
           <Parameter Name="Voucher" Type="float" Mode="InOut" />
         </Function>
         <EntityContainer Name="RestaurantModelStoreContainer">
@@ -787,8 +787,8 @@
           <FunctionImport Name="User_Login">
             <Parameter Name="CustomerName" Mode="In" Type="String" />
             <Parameter Name="Password" Mode="In" Type="String" />
-            <Parameter Name="IdUser" Mode="InOut" Type="Guid" />
-            <Parameter Name="Telefon" Mode="InOut" Type="String" />
+            <Parameter Name="UserId" Mode="InOut" Type="Guid" />
+            <Parameter Name="Phone" Mode="InOut" Type="String" />
             <Parameter Name="Voucher" Mode="InOut" Type="Double" />
           </FunctionImport>
         </EntityContainer>

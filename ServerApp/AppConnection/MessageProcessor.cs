@@ -23,9 +23,11 @@ namespace ServerApp.AppConnection
         {
             List<string> messageList = new List<string>();
             string [] words = message.Split(';');
-            for(int iter = 0; iter < words.Count(); iter++)
+            if (words.Count() == 1)
+                messageList.Add("ERROR");
+            for(int iter = 0; iter < words.Count() - 1 ; iter++)
             {
-                messageList[iter] = words[iter];
+                messageList.Add(words[iter]);
             }
             return messageList;
         }
@@ -35,7 +37,7 @@ namespace ServerApp.AppConnection
             string message = string.Empty;
             foreach(string item in list)
             {
-                message += item + ";";
+                message += item ;
             }
             return message;
         }
@@ -53,21 +55,23 @@ namespace ServerApp.AppConnection
                 case "INSERT_COURIER":
                     return DataManager.Insert_Courier(list[1], list[2]);
                 case "CREATE_ORDER":
-                    return DataManager.Insert_Order(list);
+                    return DataManager.Insert_Order(list); 
                 case "INSERT_PRODUCT":
                     return DataManager.Insert_Product(list[1], list[2], Convert.ToDouble(list[3]), Convert.ToInt32(list[4]), list[5]);
                 case "CREATE_REVIEW":
-                    return DataManager.Insert_Review(new Guid(list[1]), Convert.ToInt32(list[2]), list[3]);
+                    return DataManager.Insert_Review(new Guid(list[1]), Convert.ToInt32(list[2]), list[3]); //
                 case "REQUEST_CATEGORY":
                     return DataManager.GetCategories();
                 case "REQUEST_CATEGORY_PRODUCTS":
                     return DataManager.CategoryProducts(list[1]);
-                case "REQUEST_ORDERS":
+                case "REQUEST_ORDERS": 
                     return DataManager.GetOrders();
                 case "CHANGE_STATUS":
-                    return DataManager.ChangeStatus(new Guid(list[1]), list[2]);
+                    return DataManager.ChangeStatus(new Guid(list[1]), list[2], list);
                 case "REQUEST_ORDER_DETAILS":
                     return DataManager.GetOrderDetails(new Guid(list[1]));
+                case "REQUEST_COURIERS":
+                    return DataManager.GetCouriers(); 
                 default:
                     return new List<string>() { "UNRECOGNIZED MESSAGE"};
 

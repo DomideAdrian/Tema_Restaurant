@@ -358,7 +358,7 @@ namespace ServerApp
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
         }
     
-        public virtual int User_Login(string customerName, string password, ObjectParameter idUser, ObjectParameter telefon, ObjectParameter voucher)
+        public virtual int User_Login(string customerName, string password, ObjectParameter userId, ObjectParameter phone, ObjectParameter voucher)
         {
             var customerNameParameter = customerName != null ?
                 new ObjectParameter("CustomerName", customerName) :
@@ -368,7 +368,7 @@ namespace ServerApp
                 new ObjectParameter("Password", password) :
                 new ObjectParameter("Password", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("User_Login", customerNameParameter, passwordParameter, idUser, telefon, voucher);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("User_Login", customerNameParameter, passwordParameter, userId, phone, voucher);
         }
     }
 }
